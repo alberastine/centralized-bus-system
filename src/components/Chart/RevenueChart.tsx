@@ -1,5 +1,18 @@
 import { Card } from 'antd';
-import { Line, Column, Area } from '@ant-design/charts';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    PieChart,
+    Pie,
+    Cell,
+    Legend,
+} from 'recharts';
 
 const revenueData = [
     { date: '2025-01', revenue: 10000 },
@@ -16,53 +29,15 @@ const busRevenueData = [
     { bus: 'Bus 4', revenue: 15000 },
 ];
 
+const routeRevenueData = [
+    { route: '17B', revenue: 11000 },
+    { route: '17C', revenue: 16000 },
+    { route: '17D', revenue: 9000 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+
 const RevenueChart = () => {
-    const lineConfig = {
-        data: revenueData,
-        xField: 'date',
-        yField: 'revenue',
-        smooth: true,
-        point: { size: 2, shape: 'circle' },
-        lineStyle: { stroke: '#1890ff' },
-        tooltip: { showMarkers: false },
-        width: 395,
-        height: 180,
-        padding: 'auto',
-        xAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        yAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        legend: false,
-    };
-
-    const barConfig = {
-        data: busRevenueData,
-        xField: 'bus',
-        yField: 'revenue',
-        color: '#52c41a',
-        columnWidthRatio: 0.6,
-        width: 395,
-        height: 180,
-        padding: 'auto',
-        xAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        yAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        legend: false,
-    };
-
-    const areaConfig = {
-        data: revenueData,
-        xField: 'date',
-        yField: 'revenue',
-        smooth: true,
-        areaStyle: () => ({
-            fill: 'l(270) 0:#1890ff 1:#e6f7ff',
-        }),
-        width: 395,
-        height: 180,
-        padding: 'auto',
-        xAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        yAxis: { label: { style: { fontSize: 10 } }, tickLine: null },
-        legend: false,
-    };
-
     return (
         <div
             style={{
@@ -73,37 +48,101 @@ const RevenueChart = () => {
                 alignItems: 'center',
             }}
         >
+            {/* Line Chart */}
             <Card
-                title="Revenue Chart"
+                title="Monthly Revenue"
                 size="small"
                 style={{
                     width: '26rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
-                <Line {...lineConfig} />
+                <ResponsiveContainer width="100%" height={200}>
+                    <LineChart data={revenueData}>
+                        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                        <YAxis
+                            tick={{ fontSize: 10 }}
+                            tickFormatter={(val) => `₱${val.toLocaleString()}`}
+                        />
+                        <Tooltip
+                            formatter={(value: number) =>
+                                `₱${value.toLocaleString()}`
+                            }
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="revenue"
+                            stroke="#1890ff"
+                            strokeWidth={2}
+                            dot={{ r: 3 }}
+                        />
+                    </LineChart>
+                </ResponsiveContainer>
             </Card>
 
+            {/* Bar Chart */}
             <Card
-                title="Bus Revenue Chart"
+                title="Bus Revenue"
                 size="small"
                 style={{
                     width: '26rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
-                <Column {...barConfig} />
+                <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={busRevenueData}>
+                        <XAxis dataKey="bus" tick={{ fontSize: 10 }} />
+                        <YAxis
+                            tick={{ fontSize: 10 }}
+                            tickFormatter={(val) => `₱${val.toLocaleString()}`}
+                        />
+                        <Tooltip
+                            formatter={(value: number) =>
+                                `₱${value.toLocaleString()}`
+                            }
+                        />
+                        <Bar dataKey="revenue" fill="#1890ff" barSize={40} />
+                    </BarChart>
+                </ResponsiveContainer>
             </Card>
 
+            {/* Pie Chart */}
             <Card
-                title="Area Chart"
+                title="Route Revenue Share"
                 size="small"
                 style={{
                     width: '26rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
-                <Area {...areaConfig} />
+                <ResponsiveContainer width="100%" height={200}>
+                    <PieChart>
+                        <Pie
+                            data={routeRevenueData}
+                            dataKey="revenue"
+                            nameKey="route"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={70}
+                            label={({ name, percent }) =>
+                                `${name} (${(percent * 100).toFixed(0)}%)`
+                            }
+                        >
+                            {routeRevenueData.map((_, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={COLORS[index % COLORS.length]}
+                                />
+                            ))}
+                        </Pie>
+                        <Legend />
+                        <Tooltip
+                            formatter={(value: number) =>
+                                `₱${value.toLocaleString()}`
+                            }
+                        />
+                    </PieChart>
+                </ResponsiveContainer>
             </Card>
         </div>
     );

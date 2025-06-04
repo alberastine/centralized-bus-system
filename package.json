@@ -10,12 +10,12 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@ant-design/charts": "^2.3.0",
         "@supabase/supabase-js": "^2.49.9",
         "antd": "^5.26.0-alpha.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.30.1"
+        "react-router-dom": "^6.30.1",
+        "recharts": "^2.15.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",

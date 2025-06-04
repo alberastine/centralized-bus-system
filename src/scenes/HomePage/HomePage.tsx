@@ -19,8 +19,8 @@ const HomePage = () => {
 
     const [activeWidget, setActiveWidgetState] = useState<number>(() => {
         const saved = sessionStorage.getItem(HOME_ACTIVE_WIDGET_KEY);
-        const parsed = saved ? parseInt(saved, 10) : 0;
-        return !isNaN(parsed) ? parsed : 0;
+        const parsed = saved ? parseInt(saved, 10) : 1;
+        return !isNaN(parsed) ? parsed : 1;
     });
 
     const setActiveWidget = (key: number) => {
@@ -51,8 +51,24 @@ const HomePage = () => {
                 activeWidget={activeWidget}
             />
             <div style={{ flex: 1, width: '100%', overflow: 'auto' }}>
-                <NavBar />
-                <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
+                <div
+                    style={{
+                        width: '100%',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 1,
+                    }}
+                >
+                    <NavBar />
+                </div>
+
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexWrap: 'wrap',
+                    }}
+                >
                     {activeWidget === 1 && (
                         <div
                             style={{
@@ -66,11 +82,11 @@ const HomePage = () => {
                         </div>
                     )}
 
-                    <Content style={{ margin: '24px 16px 0' }}>
+                    <Content style={{ margin: '24px 16px 0', height: '100%' }}>
                         <div
                             style={{
                                 padding: '1rem',
-                                minHeight: '49vh',
+                                minHeight: '47vh',
                                 background: colorBgContainer,
                                 borderRadius: borderRadiusLG,
                                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
