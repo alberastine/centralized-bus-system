@@ -65,7 +65,7 @@ const SideBar = ({
                 collapsedWidth="0"
                 style={{
                     overflow: 'auto',
-                    height: '100vh',
+                    height: '100%',
                     position: 'sticky',
                 }}
             >

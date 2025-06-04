@@ -3,11 +3,15 @@ import { Layout, theme } from 'antd';
 import NavBar from '../NavBar/NavBar';
 import SideBar from '../SideBar/SideBar';
 import { useState } from 'react';
+import DashBoard from '../../pages/DashBoard/DashBoard';
+import Buses from '../../pages/Buses/Buses';
+import Drivers from '../../pages/Drivers/Drivers';
+import Conductors from '../../pages/Conductors/Conductors';
 
 const { Content } = Layout;
 const HOME_ACTIVE_WIDGET_KEY = 'homeActiveWidget';
 
-const Dashboard = () => {
+const HomePage = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -25,13 +29,13 @@ const Dashboard = () => {
     const renderWidget = (key: number) => {
         switch (key) {
             case 1:
-                return <div>Widget 1</div>;
+                return <DashBoard />;
             case 2:
-                return <div>Widget 2</div>;
+                return <Buses />;
             case 3:
-                return <div>Widget 3</div>;
+                return <Drivers />;
             case 4:
-                return <div>Widget 4</div>;
+                return <Conductors />;
             case 5:
                 return <div>Widget 5</div>;
             default:
@@ -50,10 +54,11 @@ const Dashboard = () => {
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div
                         style={{
-                            padding: 24,
-                            minHeight: 360,
+                            padding: '1rem',
+                            minHeight: '85vh',
                             background: colorBgContainer,
                             borderRadius: borderRadiusLG,
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                         }}
                     >
                         {renderWidget(activeWidget)}
@@ -64,4 +69,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default HomePage;

@@ -8,7 +8,7 @@ import { useEffect, useState, type JSX } from 'react';
 import { supabase } from './services/supabaseClient';
 import { type Session } from '@supabase/supabase-js';
 import Login from './scenes/Login/Login';
-import Dashboard from './scenes/Dashboard/Dashboard';
+import Dashboard from './scenes/HomePage/HomePage';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const [session, setSession] = useState<Session | null>(null);
