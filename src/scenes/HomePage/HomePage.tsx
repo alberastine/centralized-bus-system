@@ -7,6 +7,7 @@ import DashBoard from '../../pages/DashBoard/DashBoard';
 import Buses from '../../pages/Buses/Buses';
 import Drivers from '../../pages/Drivers/Drivers';
 import Conductors from '../../pages/Conductors/Conductors';
+import RevenueChart from '../../components/Chart/RevenueChart';
 
 const { Content } = Layout;
 const HOME_ACTIVE_WIDGET_KEY = 'homeActiveWidget';
@@ -49,21 +50,36 @@ const HomePage = () => {
                 setActiveWidget={setActiveWidget}
                 activeWidget={activeWidget}
             />
-            <div style={{ flex: 1, width: '100%' }}>
+            <div style={{ flex: 1, width: '100%', overflow: 'auto' }}>
                 <NavBar />
-                <Content style={{ margin: '24px 16px 0' }}>
-                    <div
-                        style={{
-                            padding: '1rem',
-                            minHeight: '85vh',
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-                        }}
-                    >
-                        {renderWidget(activeWidget)}
-                    </div>
-                </Content>
+                <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
+                    {activeWidget === 1 && (
+                        <div
+                            style={{
+                                height: '20%',
+                                width: '100%',
+                                marginTop: '1.5rem',
+                                padding: '0 1rem',
+                            }}
+                        >
+                            <RevenueChart />
+                        </div>
+                    )}
+
+                    <Content style={{ margin: '24px 16px 0' }}>
+                        <div
+                            style={{
+                                padding: '1rem',
+                                minHeight: '49vh',
+                                background: colorBgContainer,
+                                borderRadius: borderRadiusLG,
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                            }}
+                        >
+                            {renderWidget(activeWidget)}
+                        </div>
+                    </Content>
+                </div>
             </div>
         </Layout>
     );
