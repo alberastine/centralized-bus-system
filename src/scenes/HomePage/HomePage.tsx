@@ -1,8 +1,8 @@
 import { Layout, theme } from 'antd';
+import { useState } from 'react';
 
 import NavBar from '../NavBar/NavBar';
 import SideBar from '../SideBar/SideBar';
-import { useState } from 'react';
 import DashBoard from '../../pages/DashBoard/DashBoard';
 import Buses from '../../pages/Buses/Buses';
 import Drivers from '../../pages/Drivers/Drivers';

@@ -1,20 +1,22 @@
-export interface Bus {
+export interface Buses {
+    status: boolean;
     bus_id: string;
     bus_number: string;
+    route_number: string;
     assigned_driver?: string;
     assigned_conductor?: string;
 }
 
-export interface Driver {
+export interface Drivers {
     id: string;
-    name: string;
+    full_name: string;
     license_no: string;
-    statu: boolean;
+    status: boolean;
 }
 
-export interface Conductor {
+export interface Conductors {
     id: string;
-    name: string;
+    full_name: string;
     license_no: string;
     status: boolean;
 }
