@@ -1,4 +1,5 @@
 import { Layout, Menu, type MenuProps } from 'antd';
+import { useEffect, useState } from 'react';
 
 //icons
 import { AiFillProject } from 'react-icons/ai';
@@ -32,6 +33,15 @@ const SideBar = ({
     setActiveWidget: (key: number) => void;
     activeWidget: number;
 }) => {
+    const [openKeys, setOpenKeys] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (activeWidget === 3 || activeWidget === 4) {
+            setOpenKeys(['employees']);
+        } else {
+            setOpenKeys([]);
+        }
+    }, [activeWidget]);
     const items: MenuItem[] = [
         getItem(
             'Dashboard',
@@ -84,12 +94,14 @@ const SideBar = ({
                     theme="dark"
                     mode="inline"
                     defaultSelectedKeys={[activeWidget.toString()]}
+                    openKeys={openKeys}
+                    onOpenChange={setOpenKeys}
                     items={items}
                     onClick={({ key }) => {
                         const parsedKey = parseInt(key, 10);
                         if (!isNaN(parsedKey)) {
                             setActiveWidget(parsedKey);
-                            sessionStorage.setItem('homeActiveWidget', key); // persist selection
+                            sessionStorage.setItem('homeActiveWidget', key);
                         }
                     }}
                 />
