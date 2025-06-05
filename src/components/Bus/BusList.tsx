@@ -41,6 +41,11 @@ const BusList = ({
             dataIndex: 'status',
             key: 'status',
         },
+        {
+            title: 'Plate Number',
+            dataIndex: 'plate_number',
+            key: 'plate_number',
+        },
     ];
 
     return (
@@ -58,7 +63,6 @@ const BusList = ({
                         onClick: () => {
                             setActiveWidget(4);
                             setSelectedBusId(record.bus_id);
-                            console.log(`Bus clicked: ${record.bus_id}`);
                         },
                     })}
                 />

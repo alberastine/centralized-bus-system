@@ -14,7 +14,10 @@ const BusesPage = ({
             <Title level={4} style={{ margin: '0 0 1rem 0' }}>
                 Buses
             </Title>
-            <BusList setActiveWidget={setActiveWidget}  setSelectedBusId={setSelectedBusId}/>
+            <BusList
+                setActiveWidget={setActiveWidget}
+                setSelectedBusId={setSelectedBusId}
+            />
         </div>
     );
 };
