@@ -1,7 +1,18 @@
-const Drivers = () => {
-  return (
-    <div>Drivers</div>
-  )
-}
+import { Typography } from 'antd';
 
-export default Drivers
+import DriverList from '../../components/Driver/DriverList';
+
+const { Title } = Typography;
+
+const DriversPage = () => {
+    return (
+        <div>
+            <Title level={4} style={{ margin: '0 0 1rem 0' }}>
+                Drivers
+            </Title>
+            <DriverList />
+        </div>
+    );
+};
+
+export default DriversPage;

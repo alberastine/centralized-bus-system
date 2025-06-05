@@ -8,14 +8,14 @@ export interface Buses {
 }
 
 export interface Drivers {
-    id: string;
+    driver_id: string;
     full_name: string;
     license_no: string;
     status: boolean;
 }
 
 export interface Conductors {
-    id: string;
+    conducror_id: string;
     full_name: string;
     license_no: string;
     status: boolean;

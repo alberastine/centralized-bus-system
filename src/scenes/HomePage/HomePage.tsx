@@ -4,10 +4,11 @@ import { useState } from 'react';
 import NavBar from '../NavBar/NavBar';
 import SideBar from '../SideBar/SideBar';
 import DashBoard from '../../pages/DashBoard/DashBoard';
-import Buses from '../../pages/Buses/Buses';
-import Drivers from '../../pages/Drivers/Drivers';
-import Conductors from '../../pages/Conductors/Conductors';
+import BusesPage from '../../pages/Buses/Buses';
+import DriversPage from '../../pages/Drivers/Drivers';
+import ConductorsPage from '../../pages/Conductors/Conductors';
 import RevenueChart from '../../components/Chart/RevenueChart';
+import BusDetailsPage from '../../pages/Buses/BusDetailsPage';
 
 const { Content } = Layout;
 const HOME_ACTIVE_WIDGET_KEY = 'homeActiveWidget';
@@ -30,17 +31,17 @@ const HomePage = () => {
     const renderWidget = (key: number) => {
         switch (key) {
             case 1:
-                return <DashBoard />;
+                return <DashBoard setActiveWidget={setActiveWidget}/>;
             case 2:
-                return <Buses />;
+                return <BusesPage setActiveWidget={setActiveWidget} />;
             case 3:
-                return <Drivers />;
+                return <DriversPage />;
             case 4:
-                return <Conductors />;
+                return <ConductorsPage />;
             case 5:
-                return <div>Widget 5</div>;
+                return <BusDetailsPage />;
             default:
-                return <div>Widget 1</div>;
+                return <DashBoard setActiveWidget={setActiveWidget} />;
         }
     };
 
