@@ -8,8 +8,10 @@ import DriverList from '../../components/Driver/DriverList';
 
 const DashBoard = ({
     setActiveWidget,
+    setSelectedBusId,
 }: {
     setActiveWidget: (key: number) => void;
+    setSelectedBusId: (id: string) => void;
 }) => {
     const [buses, setBuses] = useState<Buses[]>([]);
     const [drivers, setDrivers] = useState<Drivers[]>([]);
@@ -37,7 +39,7 @@ const DashBoard = ({
         <Row gutter={[16, 16]}>
             <Col xs={24} md={8}>
                 <Card title={`Total Buses: ${buses.length}`} size="small">
-                    <BusList setActiveWidget={setActiveWidget} />
+                    <BusList setActiveWidget={setActiveWidget} setSelectedBusId={setSelectedBusId}/>
                 </Card>
             </Col>
 

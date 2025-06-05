@@ -1,5 +1,5 @@
 import { Layout, theme } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import NavBar from '../NavBar/NavBar';
 import SideBar from '../SideBar/SideBar';
@@ -9,11 +9,15 @@ import DriversPage from '../../pages/Drivers/Drivers';
 import ConductorsPage from '../../pages/Conductors/Conductors';
 import RevenueChart from '../../components/Chart/RevenueChart';
 import BusDetailsPage from '../../pages/Buses/BusDetailsPage';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 const HOME_ACTIVE_WIDGET_KEY = 'homeActiveWidget';
 
 const HomePage = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -26,9 +30,24 @@ const HomePage = () => {
 
     const [activeWidget, setActiveWidgetState] = useState<number>(() => {
         const saved = sessionStorage.getItem(HOME_ACTIVE_WIDGET_KEY);
-        const parsed = saved ? parseInt(saved, 10) : 1;
-        return !isNaN(parsed) ? parsed : 1;
+        const parsed = saved ? parseInt(saved, 10) : 0;
+        return !isNaN(parsed) ? parsed : 0;
     });
+
+    // Handle reset from login only once
+    useEffect(() => {
+        if (location.state?.resetHomeWidget) {
+            sessionStorage.setItem(HOME_ACTIVE_WIDGET_KEY, '0');
+            setActiveWidgetState(0);
+            // Clear the state so it doesn't persist on refresh
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location, navigate]);
+
+    // Sync to sessionStorage when activeWidget changes
+    useEffect(() => {
+        sessionStorage.setItem(HOME_ACTIVE_WIDGET_KEY, activeWidget.toString());
+    }, [activeWidget]);
 
     const setActiveWidget = (key: number) => {
         setActiveWidgetState(key);
@@ -45,9 +64,14 @@ const HomePage = () => {
 
     const renderWidget = (key: number) => {
         switch (key) {
+            case 0:
+                return (
+                    <DashBoard
+                        setActiveWidget={setActiveWidget}
+                        setSelectedBusId={setSelectedBusId}
+                    />
+                );
             case 1:
-                return <DashBoard setActiveWidget={setActiveWidget} />;
-            case 2:
                 return (
                     <BusesPage
                         key={selectedBusId}
@@ -55,16 +79,21 @@ const HomePage = () => {
                         setSelectedBusId={setSelectedBusId}
                     />
                 );
-            case 3:
+            case 2:
                 return <DriversPage />;
-            case 4:
+            case 3:
                 return <ConductorsPage />;
-            case 5:
+            case 4:
                 return (
                     <BusDetailsPage key={selectedBusId} busId={selectedBusId} />
                 );
             default:
-                return <DashBoard setActiveWidget={setActiveWidget} />;
+                return (
+                    <DashBoard
+                        setActiveWidget={setActiveWidget}
+                        setSelectedBusId={setSelectedBusId}
+                    />
+                );
         }
     };
 
@@ -93,7 +122,7 @@ const HomePage = () => {
                         flexWrap: 'wrap',
                     }}
                 >
-                    {activeWidget === 1 && (
+                    {activeWidget === 0 && (
                         <div
                             style={{
                                 height: '20%',

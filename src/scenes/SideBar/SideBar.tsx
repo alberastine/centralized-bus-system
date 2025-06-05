@@ -36,7 +36,7 @@ const SideBar = ({
     const [openKeys, setOpenKeys] = useState<string[]>([]);
 
     useEffect(() => {
-        if (activeWidget === 3 || activeWidget === 4) {
+        if (activeWidget === 2 || activeWidget === 3) {
             setOpenKeys(['employees']);
         } else {
             setOpenKeys([]);
@@ -45,10 +45,10 @@ const SideBar = ({
     const items: MenuItem[] = [
         getItem(
             'Dashboard',
-            1,
+            0,
             <AiFillProject style={{ fontSize: '1.5rem' }} />
         ),
-        getItem('Bus', 2, <FaBus style={{ fontSize: '1.5rem' }} />),
+        getItem('Bus', 1, <FaBus style={{ fontSize: '1.5rem' }} />),
         getItem(
             'Employees',
             'employees',
@@ -56,12 +56,12 @@ const SideBar = ({
             [
                 getItem(
                     'Driver',
-                    3,
+                    2,
                     <FaUserAlt style={{ fontSize: '1rem' }} />
                 ),
                 getItem(
                     'Conductor',
-                    4,
+                    3,
                     <FaUserAlt style={{ fontSize: '1rem' }} />
                 ),
             ]

@@ -56,7 +56,7 @@ const BusList = ({
                     size="small"
                     onRow={(record) => ({
                         onClick: () => {
-                            setActiveWidget(5);
+                            setActiveWidget(4);
                             setSelectedBusId(record.bus_id);
                             console.log(`Bus clicked: ${record.bus_id}`);
                         },
