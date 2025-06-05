@@ -18,6 +18,12 @@ const HomePage = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
+    const [selectedBusId, setSelectedBusIdState] = useState<string | null>(
+        () => {
+            return sessionStorage.getItem('selectedBusId');
+        }
+    );
+
     const [activeWidget, setActiveWidgetState] = useState<number>(() => {
         const saved = sessionStorage.getItem(HOME_ACTIVE_WIDGET_KEY);
         const parsed = saved ? parseInt(saved, 10) : 1;
@@ -28,18 +34,35 @@ const HomePage = () => {
         setActiveWidgetState(key);
     };
 
+    const setSelectedBusId = (id: string | null) => {
+        setSelectedBusIdState(id);
+        if (id) {
+            sessionStorage.setItem('selectedBusId', id);
+        } else {
+            sessionStorage.removeItem('selectedBusId');
+        }
+    };
+
     const renderWidget = (key: number) => {
         switch (key) {
             case 1:
-                return <DashBoard setActiveWidget={setActiveWidget}/>;
+                return <DashBoard setActiveWidget={setActiveWidget} />;
             case 2:
-                return <BusesPage setActiveWidget={setActiveWidget} />;
+                return (
+                    <BusesPage
+                        key={selectedBusId}
+                        setActiveWidget={setActiveWidget}
+                        setSelectedBusId={setSelectedBusId}
+                    />
+                );
             case 3:
                 return <DriversPage />;
             case 4:
                 return <ConductorsPage />;
             case 5:
-                return <BusDetailsPage />;
+                return (
+                    <BusDetailsPage key={selectedBusId} busId={selectedBusId} />
+                );
             default:
                 return <DashBoard setActiveWidget={setActiveWidget} />;
         }

@@ -5,12 +5,13 @@ import type { Buses } from '../../types';
 
 const BusList = ({
     setActiveWidget,
+    setSelectedBusId,
 }: {
     setActiveWidget: (key: number) => void;
+    setSelectedBusId: (id: string) => void;
 }) => {
     const [buses, setBuses] = useState<Buses[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,13 +43,6 @@ const BusList = ({
         },
     ];
 
-    useEffect(() => {
-        if (selectedBusId) {
-            setActiveWidget(5);
-            console.log(`Selected bus ID: ${selectedBusId}`);
-        }
-    }, [selectedBusId, setActiveWidget]);
-
     return (
         <div>
             {loading ? (
@@ -62,6 +56,7 @@ const BusList = ({
                     size="small"
                     onRow={(record) => ({
                         onClick: () => {
+                            setActiveWidget(5);
                             setSelectedBusId(record.bus_id);
                             console.log(`Bus clicked: ${record.bus_id}`);
                         },
