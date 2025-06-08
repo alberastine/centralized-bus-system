@@ -1,49 +1,20 @@
 import { Card, Descriptions, Tag, Table, Typography, Skeleton } from 'antd';
-import { supabase } from '../../services/supabaseClient';
-import type { TripHistory, Buses, Drivers, Conductors } from '../../types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useBusStore } from '../../store/useBusStore';
+import { useDriverStore } from '../../store/useDriverStore';
+import { useConductorStore } from '../../store/useConductorStore';
 
 const { Title } = Typography;
 
 const BusDetailsPage = ({ busId }: { busId: string | null }) => {
-    const [loading, setLoading] = useState(true);
-    const [busDetails, setBusDetails] = useState<Buses[]>([]);
-    const [tripHistory, setTripHistory] = useState<TripHistory[]>([]);
-    const [drivers, setDrivers] = useState<Drivers[]>([]);
-    const [conductors, setConductors] = useState<Conductors[]>([]);
+    const { drivers } = useDriverStore();
+    const { conductors } = useConductorStore();
+    const { busDetails, tripHistory, loading, fetchBusDataById } =
+        useBusStore();
 
     useEffect(() => {
-        if (!busId) return;
-
-        const fetchData = async () => {
-            setLoading(true);
-            const { data: busData } = await supabase
-                .from('buses')
-                .select('*')
-                .eq('bus_id', busId);
-            setBusDetails(busData || []);
-
-            const { data: tripData } = await supabase
-                .from('trip_history')
-                .select('*')
-                .eq('bus_id', busId);
-            setTripHistory(tripData || []);
-
-            const { data: driverData } = await supabase
-                .from('drivers')
-                .select('*');
-            setDrivers(driverData || []);
-
-            const { data: conductorData } = await supabase
-                .from('conductors')
-                .select('*');
-            setConductors(conductorData || []);
-
-            setLoading(false);
-        };
-
-        fetchData();
-    }, [busId]);
+        if (busId) fetchBusDataById(busId);
+    }, [busId, fetchBusDataById]);
 
     const mergedTripHistory = tripHistory.map((trip) => {
         const driver = drivers.find((d) => d.driver_id === trip.driver_id);
@@ -146,16 +117,16 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <Title level={3}>Bus Details</Title>
 
-            <Card>
+            <Card title="Basic Information">
                 {loading ? (
                     <Skeleton active paragraph={{ rows: 4 }} />
                 ) : (
                     busDetails.map((bus) => (
                         <Descriptions
                             key={bus.bus_id}
-                            title="Basic Information"
                             bordered
                             column={2}
+                            size="small"
                         >
                             <Descriptions.Item label="Bus Number">
                                 {bus.bus_number}
@@ -202,6 +173,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
                         columns={documentcolumns}
                         rowKey="name"
                         pagination={false}
+                        size="small"
                     />
                 )}
             </Card>
@@ -215,6 +187,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
                         columns={tripHistorycolumns}
                         rowKey="date"
                         pagination={{ pageSize: 5 }}
+                        size="small"
                     />
                 )}
             </Card>

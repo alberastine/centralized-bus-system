@@ -1,24 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Table, Skeleton } from 'antd';
-import { supabase } from '../../services/supabaseClient';
-import type { Drivers } from '../../types';
+import { useDriverStore } from '../../store/useDriverStore';
 
 const DriverList = () => {
-    const [drivers, setDrivers] = useState<Drivers[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { drivers, fetchDriverData, loading } = useDriverStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const { data: driverData } = await supabase
-                .from('drivers')
-                .select('*');
-            setDrivers(driverData || []);
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
+        fetchDriverData();
+    }, [fetchDriverData]);
 
     const driverColumns = [
         {

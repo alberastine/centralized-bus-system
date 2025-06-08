@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Card, Row, Col } from 'antd';
-import { supabase } from '../../services/supabaseClient';
-import type { Buses, Drivers, Conductors } from '../../types';
 import BusList from '../../components/Bus/BusList';
 import ConductorList from '../../components/Conductor/ConductorList';
 import DriverList from '../../components/Driver/DriverList';
+import { useBusStore } from '../../store/useBusStore';
+import { useDriverStore } from '../../store/useDriverStore';
+import { useConductorStore } from '../../store/useConductorStore';
 
 const DashBoard = ({
     setActiveWidget,
@@ -13,33 +14,22 @@ const DashBoard = ({
     setActiveWidget: (key: number) => void;
     setSelectedBusId: (id: string) => void;
 }) => {
-    const [buses, setBuses] = useState<Buses[]>([]);
-    const [drivers, setDrivers] = useState<Drivers[]>([]);
-    const [conductors, setConductors] = useState<Conductors[]>([]);
+    const { busDetails, fetchBusData } = useBusStore();
+    const { drivers } = useDriverStore();
+    const { conductors } = useConductorStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            const { data: busData } = await supabase.from('buses').select('*');
-            const { data: driverData } = await supabase
-                .from('drivers')
-                .select('*');
-            const { data: conductorData } = await supabase
-                .from('conductors')
-                .select('*');
-
-            setBuses(busData || []);
-            setDrivers(driverData || []);
-            setConductors(conductorData || []);
-        };
-
-        fetchData();
-    }, []);
+        fetchBusData();
+    }, [fetchBusData]);
 
     return (
         <Row gutter={[16, 16]}>
             <Col xs={24} md={8}>
-                <Card title={`Total Buses: ${buses.length}`} size="small">
-                    <BusList setActiveWidget={setActiveWidget} setSelectedBusId={setSelectedBusId}/>
+                <Card title={`Total Buses: ${busDetails.length}`} size="small">
+                    <BusList
+                        setActiveWidget={setActiveWidget}
+                        setSelectedBusId={setSelectedBusId}
+                    />
                 </Card>
             </Col>
 

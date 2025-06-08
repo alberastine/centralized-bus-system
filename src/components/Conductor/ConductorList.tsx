@@ -1,24 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Table, Skeleton } from 'antd';
-import { supabase } from '../../services/supabaseClient';
-import type { Conductors } from '../../types';
+import { useConductorStore } from '../../store/useConductorStore';
 
 const ConductorList = () => {
-    const [conductors, setConductors] = useState<Conductors[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { conductors, loading, fetchConductorData } = useConductorStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const { data: conductorData } = await supabase
-                .from('conductors')
-                .select('*');
-            setConductors(conductorData || []);
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
+        fetchConductorData();
+    }, [fetchConductorData]);
 
     const conductorColumns = [
         {
