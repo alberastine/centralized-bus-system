@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Table, Skeleton } from 'antd';
-import { supabase } from '../../services/supabaseClient';
-import type { Buses } from '../../types';
+import { useBusStore } from '../../store/useBusStore';
 
 const BusList = ({
     setActiveWidget,
@@ -10,20 +9,11 @@ const BusList = ({
     setActiveWidget: (key: number) => void;
     setSelectedBusId: (id: string) => void;
 }) => {
-    const [buses, setBuses] = useState<Buses[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { busDetails, fetchBusData, loading } = useBusStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const { data: busData } = await supabase.from('buses').select('*');
-            setBuses(busData || []);
-
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
+        fetchBusData();
+    }, [fetchBusData]);
 
     const busColumns = [
         {
@@ -54,8 +44,9 @@ const BusList = ({
                 <Skeleton active paragraph={{ rows: 4 }} />
             ) : (
                 <Table
-                    dataSource={buses}
+                    dataSource={busDetails}
                     columns={busColumns}
+                    scroll={{ y: 55 * 9 }}
                     pagination={false}
                     rowKey="bus_id"
                     size="small"

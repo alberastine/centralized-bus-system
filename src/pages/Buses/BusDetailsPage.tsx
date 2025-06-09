@@ -115,7 +115,9 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Title level={3}>Bus Details</Title>
+            <Title level={3} style={{ margin: '0' }}>
+                Bus Details
+            </Title>
 
             <Card title="Basic Information">
                 {loading ? (
