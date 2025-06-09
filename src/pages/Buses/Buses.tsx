@@ -1,5 +1,7 @@
 import { Typography } from 'antd';
 import BusList from '../../components/Bus/BusList';
+import AddBus from '../../components/Bus/AddBus';
+import BusAssignment from '../../components/Bus/BusAssignment';
 
 const { Title } = Typography;
 const BusesPage = ({
@@ -11,9 +13,20 @@ const BusesPage = ({
 }) => {
     return (
         <div>
-            <Title level={4} style={{ margin: '0 0 1rem 0' }}>
-                Buses
-            </Title>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1.5rem',
+                }}
+            >
+                <Title level={4} style={{ margin: '0' }}>
+                    Buses
+                </Title>
+                <BusAssignment />
+                <AddBus />
+            </div>
             <BusList
                 setActiveWidget={setActiveWidget}
                 setSelectedBusId={setSelectedBusId}

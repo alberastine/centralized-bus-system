@@ -1,0 +1,6 @@
+.custom-btn:focus,
+.custom-btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}

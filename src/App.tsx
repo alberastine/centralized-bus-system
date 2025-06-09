@@ -8,7 +8,9 @@ import { useEffect, useState, type JSX } from 'react';
 import { supabase } from './services/supabaseClient';
 import { type Session } from '@supabase/supabase-js';
 import Login from './scenes/Login/Login';
-import Dashboard from './scenes/HomePage/HomePage';
+import HomePage from './scenes/HomePage/HomePage';
+import { useModalStore } from './store/useModalStore';
+import GlobalModal from './components/GlobalModal';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const [session, setSession] = useState<Session | null>(null);
@@ -40,15 +42,24 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 const App: React.FC = () => {
+    const { isModalOpen, closeModal, modalContent, modalTitle } =
+        useModalStore();
     return (
         <Router future={{ v7_relativeSplatPath: true }}>
+            <GlobalModal
+                open={isModalOpen}
+                onClose={closeModal}
+                title={modalTitle}
+            >
+                {modalContent}
+            </GlobalModal>
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route
                     path="/dashboard"
                     element={
                         <ProtectedRoute>
-                            <Dashboard />
+                            <HomePage />
                         </ProtectedRoute>
                     }
                 />

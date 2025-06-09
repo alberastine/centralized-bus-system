@@ -1,22 +1,21 @@
 import { Button } from 'antd';
 import { useModalStore } from '../../store/useModalStore';
-import BusAssignFromModal from '../modal-content/BusAssignFromModal';
-
+import AddBusFormModal from '../modal-content/AddBusFormModal';
 
 import '../../styles/BusStyle.css';
 
-const BusAssignment = () => {
+const AddBus = () => {
     const { openModal } = useModalStore();
 
     const handleClick = () => {
-        openModal(<BusAssignFromModal />, 'Assign Bus');
+        openModal(<AddBusFormModal />, 'Add New Bus');
     };
 
     return (
         <Button type="primary" className="custom-btn" onClick={handleClick}>
-            Assign Bus
+            Add Bus
         </Button>
     );
 };
 
-export default BusAssignment;
+export default AddBus;
