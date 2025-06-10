@@ -1,7 +1,6 @@
 import { Layout, Menu, type MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
 
-//icons
 import { AiFillProject } from 'react-icons/ai';
 import { FaBus, FaUserAlt } from 'react-icons/fa';
 import { MdGroups } from 'react-icons/md';
@@ -29,9 +28,11 @@ const getItem = (
 const SideBar = ({
     setActiveWidget,
     activeWidget,
+    collapsed,
 }: {
     setActiveWidget: (key: number) => void;
     activeWidget: number;
+    collapsed: boolean;
 }) => {
     const [openKeys, setOpenKeys] = useState<string[]>([]);
 
@@ -73,6 +74,9 @@ const SideBar = ({
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
+                trigger={null}
+                collapsible
+                collapsed={collapsed}
                 style={{
                     overflow: 'auto',
                     height: '100%',
@@ -91,9 +95,14 @@ const SideBar = ({
                         gap: '8px',
                     }}
                 >
-                    <img src="/BUS.png" alt="logo" width="25px" style={{
-                        borderRadius: '50%',
-                    }} />
+                    <img
+                        src="/BUS.png"
+                        alt="logo"
+                        width="25px"
+                        style={{
+                            borderRadius: '50%',
+                        }}
+                    />
                     BusCentral PH
                 </div>
                 <Menu

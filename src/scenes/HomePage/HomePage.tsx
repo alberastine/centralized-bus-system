@@ -18,6 +18,8 @@ const HomePage = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const [collapsed, setCollapsed] = useState(false);
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -102,6 +104,7 @@ const HomePage = () => {
             <SideBar
                 setActiveWidget={setActiveWidget}
                 activeWidget={activeWidget}
+                collapsed={collapsed}
             />
             <div style={{ flex: 1, width: '100%', overflow: 'auto' }}>
                 <div
@@ -112,7 +115,7 @@ const HomePage = () => {
                         zIndex: 1,
                     }}
                 >
-                    <NavBar />
+                    <NavBar collapsed={collapsed} setCollapsed={setCollapsed} />
                 </div>
 
                 <div
