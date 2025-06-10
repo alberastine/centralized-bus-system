@@ -72,8 +72,8 @@ const SideBar = ({
     return (
         <>
             <Sider
-                breakpoint="lg"
-                collapsedWidth="0"
+                // breakpoint="lg"
+                // collapsedWidth="0"
                 trigger={null}
                 collapsible
                 collapsed={collapsed}

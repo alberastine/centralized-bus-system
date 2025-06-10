@@ -53,7 +53,7 @@ const RevenueChart = () => {
                 title="Monthly Revenue"
                 size="small"
                 style={{
-                    width: '26rem',
+                    width: '25rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
@@ -85,7 +85,7 @@ const RevenueChart = () => {
                 title="Bus Revenue"
                 size="small"
                 style={{
-                    width: '26rem',
+                    width: '25rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
@@ -111,7 +111,7 @@ const RevenueChart = () => {
                 title="Route Revenue Share"
                 size="small"
                 style={{
-                    width: '26rem',
+                    width: '25rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
             >
