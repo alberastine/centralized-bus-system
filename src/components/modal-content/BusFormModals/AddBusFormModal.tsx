@@ -1,8 +1,8 @@
 import { Button, Form, Input } from 'antd';
-import { useModalStore } from '../../store/useModalStore';
-import { useBusStore } from '../../store/useBusStore';
+import { useModalStore } from '../../../store/useModalStore';
+import { useBusStore } from '../../../store/useBusStore';
 
-import '../../styles/BusStyle.css';
+import '../../../styles/BusStyle.css';
 
 import { useEffect } from 'react';
 
@@ -48,7 +48,11 @@ const AddBusFormModal = () => {
     };
 
     return (
-        <Form form={form} layout="vertical">
+        <Form
+            form={form}
+            layout="vertical"
+            style={{ overflow: 'auto', maxHeight: '50vh' }}
+        >
             <Form.Item
                 label="Route Number"
                 name="route_number"
@@ -56,6 +60,7 @@ const AddBusFormModal = () => {
             >
                 <Input />
             </Form.Item>
+
             <Form.Item
                 label="Bus Number"
                 name="bus_number"
@@ -63,6 +68,7 @@ const AddBusFormModal = () => {
             >
                 <Input />
             </Form.Item>
+
             <Form.Item
                 label="Plate Number"
                 name="plate_number"
@@ -70,6 +76,7 @@ const AddBusFormModal = () => {
             >
                 <Input />
             </Form.Item>
+
             <div
                 style={{
                     display: 'flex',
@@ -78,8 +85,14 @@ const AddBusFormModal = () => {
                     marginTop: 16,
                 }}
             >
-                <Button className='custom-btn' onClick={handleCancel}>Cancel</Button>
-                <Button className='custom-btn' type="primary" onClick={handleSubmit}>
+                <Button className="custom-btn" onClick={handleCancel}>
+                    Cancel
+                </Button>
+                <Button
+                    className="custom-btn"
+                    type="primary"
+                    onClick={handleSubmit}
+                >
                     Submit
                 </Button>
             </div>

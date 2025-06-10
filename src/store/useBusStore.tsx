@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabaseClient';
-import type { Buses, TripHistory } from '../types';
+import type { Buses, BusPermitStatus, TripHistory } from '../types';
 
 interface BusState {
     busDetails: Buses[];
     tripHistory: TripHistory[];
+    busPermitStatus: BusPermitStatus[];
     loading: boolean;
     nextBusNumber: string;
     fetchBusData: () => Promise<void>;
@@ -16,20 +17,24 @@ interface BusState {
 export const useBusStore = create<BusState>((set, get) => ({
     busDetails: [],
     tripHistory: [],
+    busPermitStatus: [],
     loading: false,
     nextBusNumber: '',
 
     fetchBusData: async () => {
         set({ loading: true });
 
-        const [{ data: buses }, { data: trips }] = await Promise.all([
-            supabase.from('buses').select('*'),
-            supabase.from('trip_history').select('*'),
-        ]);
+        const [{ data: buses }, { data: trips }, { data: permits }] =
+            await Promise.all([
+                supabase.from('buses').select('*'),
+                supabase.from('trip_history').select('*'),
+                supabase.from('bus_permit_status').select('*'),
+            ]);
 
         set({
             busDetails: buses || [],
             tripHistory: trips || [],
+            busPermitStatus: permits || [],
             loading: false,
         });
     },
@@ -37,16 +42,20 @@ export const useBusStore = create<BusState>((set, get) => ({
     fetchBusDataById: async (busId: string) => {
         set({ loading: true });
 
-        const [{ data: busDetails }, { data: tripHistory }] = await Promise.all(
-            [
-                supabase.from('buses').select('*').eq('bus_id', busId),
-                supabase.from('trip_history').select('*').eq('bus_id', busId),
-            ]
-        );
+        const [
+            { data: busDetails },
+            { data: tripHistory },
+            { data: busPermitStatus },
+        ] = await Promise.all([
+            supabase.from('buses').select('*').eq('bus_id', busId),
+            supabase.from('trip_history').select('*').eq('bus_id', busId),
+            supabase.from('bus_permit_status').select('*').eq('bus_id', busId),
+        ]);
 
         set({
             busDetails: busDetails || [],
             tripHistory: tripHistory || [],
+            busPermitStatus: busPermitStatus || [],
             loading: false,
         });
     },

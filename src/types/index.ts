@@ -8,6 +8,20 @@ export interface Buses {
     assigned_conductor?: string;
 }
 
+export interface BusPermitStatus {
+    bus_id: string;
+    has_cpc: boolean;
+    has_garage_accreditation: boolean;
+    has_conductor_permit: boolean;
+    has_mvr: boolean;
+    has_emission_test: boolean;
+    has_roadworthiness: boolean;
+    has_ctpl: boolean;
+    has_ppai: boolean;
+    has_mayors_permit: boolean;
+    has_barangay_clearance: boolean;
+}
+
 export interface Drivers {
     driver_id: string;
     full_name: string;

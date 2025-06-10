@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { useModalStore } from '../../store/useModalStore';
-import AddBusFormModal from '../modal-content/AddBusFormModal';
+import AddBusFormModal from '../modal-content/BusFormModals/AddBusFormModal';
 
 import '../../styles/BusStyle.css';
 

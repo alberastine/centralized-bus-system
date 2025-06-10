@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useBusStore } from '../../store/useBusStore';
 import { useDriverStore } from '../../store/useDriverStore';
 import { useConductorStore } from '../../store/useConductorStore';
+import AddBusPermit from '../../components/Bus/AddBusPermit';
 
 const { Title } = Typography;
 
@@ -166,7 +167,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
                 )}
             </Card>
 
-            <Card title="Documents">
+            <Card title="Documents" extra={<AddBusPermit  busId={busId}/>}>
                 {loading ? (
                     <Skeleton active paragraph={{ rows: 3 }} />
                 ) : (

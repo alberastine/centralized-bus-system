@@ -1,6 +1,5 @@
-import { useModalStore } from '../../store/useModalStore';
+import { useModalStore } from '../../../store/useModalStore';
 import { Button, Form, Input } from 'antd';
-
 
 import '../../styles/BusStyle.css';
 

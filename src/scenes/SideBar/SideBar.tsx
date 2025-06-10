@@ -86,9 +86,15 @@ const SideBar = ({
                         textAlign: 'start',
                         fontSize: '20px',
                         fontWeight: 'bold',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
                     }}
                 >
-                    🚌 BusCorp
+                    <img src="/BUS.png" alt="logo" width="25px" style={{
+                        borderRadius: '50%',
+                    }} />
+                    BusCentral PH
                 </div>
                 <Menu
                     theme="dark"
