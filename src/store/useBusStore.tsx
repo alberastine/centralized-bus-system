@@ -88,18 +88,45 @@ export const useBusStore = create<BusState>((set, get) => ({
     },
 
     addBus: async (bus) => {
-        const { data, error } = await supabase
+        const { data: busData, error: busError } = await supabase
             .from('buses')
             .insert([bus])
             .select();
 
-        if (error) {
-            console.error('Failed to add bus:', error);
-            throw error;
+        if (busError) {
+            console.error('Failed to add bus:', busError);
+            throw busError;
+        }
+
+        const newBus = busData?.[0];
+        if (!newBus) return;
+
+        const defaultPermit: BusPermitStatus = {
+            bus_id: newBus.bus_id,
+            has_cpc: false,
+            has_garage_accreditation: false,
+            has_conductor_permit: false,
+            has_mvr: false,
+            has_emission_test: false,
+            has_roadworthiness: false,
+            has_ctpl: false,
+            has_ppai: false,
+            has_mayors_permit: false,
+            has_barangay_clearance: false,
+        };
+
+        const { error: permitError } = await supabase
+            .from('bus_permit_status')
+            .insert([defaultPermit]);
+
+        if (permitError) {
+            console.error('Failed to add bus permit status:', permitError);
+            throw permitError;
         }
 
         set((state) => ({
-            busDetails: [...state.busDetails, ...(data || [])],
+            busDetails: [...state.busDetails, newBus],
+            busPermitStatus: [...state.busPermitStatus, defaultPermit],
         }));
 
         get().fetchBusData();
