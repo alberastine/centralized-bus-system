@@ -4,6 +4,7 @@ import { useBusStore } from '../../store/useBusStore';
 import { useDriverStore } from '../../store/useDriverStore';
 import { useConductorStore } from '../../store/useConductorStore';
 import AddBusPermit from '../../components/Bus/AddBusPermit';
+import UpdateBusDetails from '../../components/Bus/UpdateBusDetails';
 
 const { Title } = Typography;
 
@@ -120,7 +121,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
                 Bus Details
             </Title>
 
-            <Card title="Basic Information">
+            <Card title="Basic Information" extra={<UpdateBusDetails  busId={busId}/>}>
                 {loading ? (
                     <Skeleton active paragraph={{ rows: 4 }} />
                 ) : (
