@@ -1,5 +1,5 @@
 export interface Buses {
-    status: boolean;
+    status: 'active' | 'inactive' | 'under maintenance';
     bus_id: string;
     bus_number: string;
     route_number: string;
