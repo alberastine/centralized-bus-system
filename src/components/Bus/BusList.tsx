@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
 import {
     Table,
     Skeleton,
@@ -14,7 +13,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useBusStore } from '../../store/useBusStore';
 import type { Buses } from '../../types';
 
-
 const BusList = ({
     setActiveWidget,
     setSelectedBusId,
@@ -22,10 +20,13 @@ const BusList = ({
     setActiveWidget: (key: number) => void;
     setSelectedBusId: (id: string) => void;
 }) => {
-    const { busDetails, fetchBusData, loading } =
-        useBusStore();
+    const { busDetails = [], fetchBusData, loading } = useBusStore();
+
+    const [filteredInfo, setFilteredInfo] = useState<
+        Record<string, React.Key[] | null>
+    >({});
     const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState<string>('');
 
     useEffect(() => {
         fetchBusData();
@@ -37,14 +38,64 @@ const BusList = ({
         dataIndex: keyof Buses
     ) => {
         confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
+        setSearchText(selectedKeys[0] ?? '');
+        setSearchedColumn(String(dataIndex));
+        setFilteredInfo((prev) => ({
+            ...prev,
+            [String(dataIndex)]: selectedKeys[0] ? [selectedKeys[0]] : null,
+        }));
     };
 
     const handleReset = (clearFilters?: () => void) => {
         clearFilters?.();
         setSearchText('');
+        setFilteredInfo((prev) => ({ ...prev, plate_number: null }));
     };
+
+    const handleTableChange: TableProps<Buses>['onChange'] = (
+        _pagination,
+        filters
+    ) => {
+        setFilteredInfo(filters as Record<string, React.Key[] | null>);
+    };
+
+    const filteredData = useMemo(() => {
+        let data = Array.isArray(busDetails) ? busDetails.slice() : [];
+
+        const statusFilter = filteredInfo.status as string[] | null;
+        if (statusFilter && statusFilter.length > 0) {
+            const normalized = statusFilter.map((s) =>
+                String(s).toLowerCase().trim()
+            );
+            data = data.filter((rec) =>
+                normalized.includes(
+                    String(rec.status ?? '')
+                        .toLowerCase()
+                        .trim()
+                )
+            );
+        }
+
+        const plateFilter =
+            (filteredInfo.plate_number as string[] | null) ?? null;
+        if (plateFilter && plateFilter.length > 0) {
+            const q = String(plateFilter[0]).toLowerCase().trim();
+            data = data.filter((rec) =>
+                String(rec.plate_number ?? '')
+                    .toLowerCase()
+                    .includes(q)
+            );
+        } else if (searchText && searchedColumn === 'plate_number') {
+            const q = searchText.toLowerCase().trim();
+            data = data.filter((rec) =>
+                String(rec.plate_number ?? '')
+                    .toLowerCase()
+                    .includes(q)
+            );
+        }
+
+        return data;
+    }, [busDetails, filteredInfo, searchText, searchedColumn]);
 
     const busColumns: TableProps<Buses>['columns'] = [
         {
@@ -68,22 +119,25 @@ const BusList = ({
                 { text: 'Inactive', value: 'inactive' },
                 { text: 'Under Maintenance', value: 'under maintenance' },
             ],
+            filteredValue: filteredInfo.status || null,
+            onFilter: (value, record) =>
+                String(record.status ?? '')
+                    .toLowerCase()
+                    .trim() === String(value).toLowerCase().trim(),
             render: (status: Buses['status']) => {
+                const s = String(status ?? '')
+                    .toLowerCase()
+                    .trim();
                 let color: string;
-                switch (status) {
-                    case 'active':
-                        color = 'green';
-                        break;
-                    case 'inactive':
-                        color = 'volcano';
-                        break;
-                    case 'under maintenance':
-                        color = 'geekblue';
-                        break;
-                    default:
-                        color = 'default';
-                }
-                return <Tag color={color}>{status.toUpperCase()}</Tag>;
+                if (s === 'active') color = 'green';
+                else if (s === 'inactive') color = 'volcano';
+                else if (s === 'under maintenance') color = 'geekblue';
+                else color = 'default';
+                return (
+                    <Tag color={color}>
+                        {String(status ?? '').toUpperCase()}
+                    </Tag>
+                );
             },
         },
         {
@@ -100,7 +154,7 @@ const BusList = ({
                 <div style={{ padding: 8 }}>
                     <Input
                         placeholder="Search Plate Number"
-                        value={selectedKeys[0]}
+                        value={selectedKeys?.[0] as string}
                         onChange={(e) => {
                             const value = e.target.value;
                             setSelectedKeys(value ? [value] : []);
@@ -134,7 +188,14 @@ const BusList = ({
                             Search
                         </Button>
                         <Button
-                            onClick={() => handleReset(clearFilters)}
+                            onClick={() => {
+                                handleReset(clearFilters);
+                                setFilteredInfo((prev) => ({
+                                    ...prev,
+                                    plate_number: null,
+                                }));
+                                confirm?.();
+                            }}
                             size="small"
                             style={{ width: 90 }}
                         >
@@ -143,17 +204,17 @@ const BusList = ({
                     </Space>
                 </div>
             ),
-            onFilter: (value, record) =>
-                record.plate_number
-                    .toLowerCase()
-                    .includes((value as string).toLowerCase()),
             filteredValue:
-                searchText && searchedColumn === 'plate_number'
+                (filteredInfo.plate_number as React.Key[] | null) ??
+                (searchText && searchedColumn === 'plate_number'
                     ? [searchText]
-                    : null,
+                    : null),
+            onFilter: (value, record) =>
+                String(record.plate_number ?? '')
+                    .toLowerCase()
+                    .includes(String(value).toLowerCase()),
         },
     ];
-
 
     return (
         <div>
@@ -161,9 +222,8 @@ const BusList = ({
                 <Skeleton active paragraph={{ rows: 4 }} />
             ) : (
                 <>
-                    {console.log('Bus details in table:', busDetails)}
                     <Table
-                        dataSource={busDetails}
+                        dataSource={filteredData}
                         columns={busColumns}
                         scroll={{ y: 55 * 9 }}
                         pagination={false}
@@ -175,6 +235,7 @@ const BusList = ({
                                 setSelectedBusId(record.bus_id);
                             },
                         })}
+                        onChange={handleTableChange}
                     />
                 </>
             )}
