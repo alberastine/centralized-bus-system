@@ -103,9 +103,9 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
             case 'active':
                 return <Tag color="green">Active</Tag>;
             case 'under maintenance':
-                return <Tag color="orange">Under Maintenance</Tag>;
+                return <Tag color="geekblue">Under Maintenance</Tag>;
             case 'inactive':
-                return <Tag color="red">Inactive</Tag>;
+                return <Tag color="volcano">Inactive</Tag>;
             default:
                 return <Tag>{status}</Tag>;
         }

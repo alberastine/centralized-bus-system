@@ -16,9 +16,11 @@ import type { Buses } from '../../types';
 const BusList = ({
     setActiveWidget,
     setSelectedBusId,
+    onBusCountChange,
 }: {
     setActiveWidget: (key: number) => void;
     setSelectedBusId: (id: string) => void;
+    onBusCountChange?: (count: number) => void;
 }) => {
     const { busDetails = [], fetchBusData, loading } = useBusStore();
 
@@ -31,6 +33,12 @@ const BusList = ({
     useEffect(() => {
         fetchBusData();
     }, [fetchBusData]);
+
+    useEffect(() => {
+        if (onBusCountChange) {
+            onBusCountChange(busDetails.length);
+        }
+    }, [busDetails, onBusCountChange]);
 
     const handleSearch = (
         selectedKeys: string[],
@@ -234,6 +242,7 @@ const BusList = ({
                                 setActiveWidget(4);
                                 setSelectedBusId(record.bus_id);
                             },
+                            style: { cursor: 'pointer' },
                         })}
                         onChange={handleTableChange}
                     />

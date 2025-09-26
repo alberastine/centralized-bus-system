@@ -7,7 +7,7 @@ import DashBoard from '../../pages/DashBoard/DashBoard';
 import BusesPage from '../../pages/Buses/Buses';
 import DriversPage from '../../pages/Drivers/Drivers';
 import ConductorsPage from '../../pages/Conductors/Conductors';
-import RevenueChart from '../../components/Chart/RevenueChart';
+// import RevenueChart from '../../components/Chart/RevenueChart';
 import BusDetailsPage from '../../pages/Buses/BusDetailsPage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -69,8 +69,8 @@ const HomePage = () => {
             case 0:
                 return (
                     <DashBoard
-                        setActiveWidget={setActiveWidget}
-                        setSelectedBusId={setSelectedBusId}
+                    // setActiveWidget={setActiveWidget}
+                    // setSelectedBusId={setSelectedBusId}
                     />
                 );
             case 1:
@@ -92,12 +92,25 @@ const HomePage = () => {
             default:
                 return (
                     <DashBoard
-                        setActiveWidget={setActiveWidget}
-                        setSelectedBusId={setSelectedBusId}
+                    // setActiveWidget={setActiveWidget}
+                    // setSelectedBusId={setSelectedBusId}
                     />
                 );
         }
     };
+
+    const widgetStyles =
+        activeWidget === 0
+            ? {
+                  minHeight: '47vh',
+              }
+            : {
+                  padding: '1rem',
+                  minHeight: '47vh',
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              };
 
     return (
         <Layout style={{ height: '100vh', width: '100vw' }}>
@@ -125,7 +138,7 @@ const HomePage = () => {
                         flexWrap: 'wrap',
                     }}
                 >
-                    {activeWidget === 0 && (
+                    {/* {activeWidget === 0 && (
                         <div
                             style={{
                                 height: '20%',
@@ -136,17 +149,12 @@ const HomePage = () => {
                         >
                             <RevenueChart />
                         </div>
-                    )}
+                    )} */}
 
                     <Content style={{ margin: '24px 16px 0', height: '100%' }}>
                         <div
-                            style={{
-                                padding: '1rem',
-                                minHeight: '47vh',
-                                background: colorBgContainer,
-                                borderRadius: borderRadiusLG,
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-                            }}
+                            className="site-layout-background"
+                            style={widgetStyles}
                         >
                             {renderWidget(activeWidget)}
                         </div>

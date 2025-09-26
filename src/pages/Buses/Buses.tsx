@@ -1,6 +1,7 @@
 import { Typography } from 'antd';
 import BusList from '../../components/Bus/BusList';
 import AddBus from '../../components/Bus/AddBus';
+import { useState } from 'react';
 
 const { Title } = Typography;
 const BusesPage = ({
@@ -10,6 +11,8 @@ const BusesPage = ({
     setActiveWidget: (key: number) => void;
     setSelectedBusId: (id: string) => void;
 }) => {
+    const [busCount, setBusCount] = useState(0);
+
     return (
         <div>
             <div
@@ -21,13 +24,14 @@ const BusesPage = ({
                 }}
             >
                 <Title level={4} style={{ margin: '0' }}>
-                    Buses
+                    Total Buses Owned: {busCount}
                 </Title>
                 <AddBus />
             </div>
             <BusList
                 setActiveWidget={setActiveWidget}
                 setSelectedBusId={setSelectedBusId}
+                onBusCountChange={setBusCount}
             />
         </div>
     );
