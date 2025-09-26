@@ -45,3 +45,11 @@ export interface TripHistory {
     trip_date: string;
     remitted: number;
 }
+
+export interface UserInfo {
+    full_name?: string;
+    email?: string;
+    username?: string;
+    password?: string;
+    role?: 'admin' | 'driver' | 'conductor';
+}
