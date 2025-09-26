@@ -1,61 +1,92 @@
-import { Card } from 'antd';
+import { Card, Skeleton } from 'antd';
 import { FaBusAlt, FaUsers } from 'react-icons/fa';
 import { FaArrowDown, FaArrowTrendUp, FaArrowUp } from 'react-icons/fa6';
 
 import { LuPhilippinePeso } from 'react-icons/lu';
 
-const summaryData = [
-    {
-        title: 'Total Buses',
-        value: '48',
-        icon: (
-            <FaBusAlt
-                style={{ width: '20px', height: '20px', color: '#2563eb' }}
-            />
-        ),
-        trend: '+2 this month',
-        trendUp: true,
-        bgColor: '#eff6ff',
-    },
-    {
-        title: 'Total Employees',
-        value: '156',
-        subtitle: '96 Drivers • 60 Conductors',
-        icon: (
-            <FaUsers
-                style={{ width: '20px', height: '20px', color: '#0d9488' }}
-            />
-        ),
-        trend: '+8 this week',
-        trendUp: true,
-        bgColor: '#f0fdfa',
-    },
-    {
-        title: 'Daily Income',
-        value: '₱12,450',
-        icon: (
-            <FaArrowTrendUp
-                style={{ width: '20px', height: '20px', color: '#16a34a' }}
-            />
-        ),
-        trend: '+15% from yesterday',
-        trendUp: true,
-        bgColor: '#f0fdf4',
-    },
-    {
-        title: 'Pending Salaries',
-        value: '₱8,200',
-        icon: (
-            <LuPhilippinePeso
-                style={{ width: '20px', height: '20px', color: '#ea580c' }}
-            />
-        ),
-        trend: '12 employees',
-        trendUp: false,
-        bgColor: '#fff7ed',
-    },
-];
+import { useBusStore } from '../../store/useBusStore';
+import { useDriverStore } from '../../store/useDriverStore';
+import { useConductorStore } from '../../store/useConductorStore';
+import { useEffect } from 'react';
+
 const SummaryCards = () => {
+    const { busDetails, loading: busLoading, fetchBusData } = useBusStore();
+  const { conductors, loading: conductorsLoading, fetchConductorData } = useConductorStore();
+  const { drivers, loading: driversLoading, fetchDriverData } = useDriverStore();
+
+    useEffect(() => {
+        fetchConductorData();
+        fetchDriverData();
+        fetchBusData();
+    }, [fetchConductorData, fetchDriverData, fetchBusData]);
+
+    const totalEmployees = drivers.length + conductors.length;
+
+    const isLoading = busLoading || conductorsLoading || driversLoading;
+
+    const summaryData = [
+        {
+            title: 'Total Buses',
+            value: isLoading ? (
+                <Skeleton.Input style={{ width: 50, height: 20 }} active />
+            ) : (
+                busDetails.length
+            ),
+            icon: (
+                <FaBusAlt
+                    style={{ width: '20px', height: '20px', color: '#2563eb' }}
+                />
+            ),
+            trend: '+2 this month',
+            trendUp: true,
+            bgColor: '#eff6ff',
+        },
+        {
+            title: 'Total Employees',
+            value: isLoading ? (
+                <Skeleton.Input style={{ width: 50, height: 20 }} active />
+            ) : (
+                totalEmployees
+            ),
+            subtitle: isLoading ? (
+                <Skeleton.Input style={{ width: 80, height: 20 }} active />
+            ) : (
+                `${drivers.length} Drivers, ${conductors.length} Conductors`
+            ),
+            icon: (
+                <FaUsers
+                    style={{ width: '20px', height: '20px', color: '#0d9488' }}
+                />
+            ),
+            trend: '+8 this week',
+            trendUp: true,
+            bgColor: '#f0fdfa',
+        },
+        {
+            title: 'Daily Income',
+            value: '₱12,450',
+            icon: (
+                <FaArrowTrendUp
+                    style={{ width: '20px', height: '20px', color: '#16a34a' }}
+                />
+            ),
+            trend: '+15% from yesterday',
+            trendUp: true,
+            bgColor: '#f0fdf4',
+        },
+        {
+            title: 'Pending Salaries',
+            value: '₱8,200',
+            icon: (
+                <LuPhilippinePeso
+                    style={{ width: '20px', height: '20px', color: '#ea580c' }}
+                />
+            ),
+            trend: '12 employees',
+            trendUp: false,
+            bgColor: '#fff7ed',
+        },
+    ];
     return (
         <div
             style={{
