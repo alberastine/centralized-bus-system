@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Badge,
     Button,
     Dropdown,
     Layout,
@@ -9,6 +10,7 @@ import {
 } from 'antd';
 import { useEffect } from 'react';
 import {
+    BellOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     UserOutlined,
@@ -81,6 +83,7 @@ const NavBar = ({
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '0 1rem 0 0',
+                    boxShadow: '0 2px 8px #f0f1f2',
                 }}
             >
                 <div>
@@ -102,54 +105,70 @@ const NavBar = ({
                         }}
                     />
                 </div>
-                <Dropdown menu={{ items }} trigger={['click']}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            cursor: 'pointer',
-                            width: 200,
-                        }}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <Badge
+                        count={5}
+                        size="default"
+                        style={{ cursor: 'pointer' }}
                     >
-                        <Avatar
-                            shape="circle"
-                            style={{ backgroundColor: '#1677ff' }}
-                            icon={<UserOutlined />}
+                        <BellOutlined
+                            style={{ fontSize: '1.3rem', cursor: 'pointer' }}
                         />
+                    </Badge>
+                    <Dropdown menu={{ items }} trigger={['click']}>
                         <div
                             style={{
                                 display: 'flex',
-                                flexDirection: 'column',
-                                lineHeight: 1.1,
+                                alignItems: 'center',
+                                gap: 8,
+                                cursor: 'pointer',
                             }}
                         >
-                            {loading ? (
-                                <>
-                                    <Skeleton.Input
-                                        active
-                                        size="small"
-                                        style={{ width: 155, marginBottom: 4 }}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <span style={{ fontWeight: 600 }}>
-                                        {userInfo?.full_name}
-                                    </span>
-                                    <span
-                                        style={{
-                                            color: 'rgba(0,0,0,0.45)',
-                                            fontSize: 12,
-                                        }}
-                                    >
-                                        {userInfo?.email}
-                                    </span>
-                                </>
-                            )}
+                            <Avatar
+                                shape="circle"
+                                style={{
+                                    backgroundColor: '#1677ff',
+                                    marginLeft: 8,
+                                }}
+                                icon={<UserOutlined />}
+                            />
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    lineHeight: 1.1,
+                                }}
+                            >
+                                {loading ? (
+                                    <>
+                                        <Skeleton.Input
+                                            active
+                                            size="small"
+                                            style={{
+                                                width: 155,
+                                                marginBottom: 4,
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <span style={{ fontWeight: 600 }}>
+                                            {userInfo?.full_name}
+                                        </span>
+                                        <span
+                                            style={{
+                                                color: 'rgba(0,0,0,0.45)',
+                                                fontSize: 12,
+                                            }}
+                                        >
+                                            {userInfo?.email}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </Dropdown>
+                    </Dropdown>
+                </div>
             </Header>
         </>
     );
