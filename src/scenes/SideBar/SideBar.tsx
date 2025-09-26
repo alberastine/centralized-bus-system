@@ -92,18 +92,32 @@ const SideBar = ({
                         fontWeight: 'bold',
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: collapsed ? 'center' : 'flex-start',
                         gap: '8px',
                     }}
                 >
-                    <img
-                        src="/BUS.png"
-                        alt="logo"
-                        width="25px"
-                        style={{
-                            borderRadius: '50%',
-                        }}
-                    />
-                    BusCentral PH
+                    {collapsed ? (
+                        <img
+                            src="/BUS.png"
+                            alt="logo"
+                            width="30px"
+                            style={{
+                                borderRadius: '50%',
+                            }}
+                        />
+                    ) : (
+                        <>
+                            <img
+                                src="/BUS.png"
+                                alt="logo"
+                                width="25px"
+                                style={{
+                                    borderRadius: '50%',
+                                }}
+                            />
+                            <p>BusCentral PH</p>
+                        </>
+                    )}
                 </div>
                 <Menu
                     theme="dark"
