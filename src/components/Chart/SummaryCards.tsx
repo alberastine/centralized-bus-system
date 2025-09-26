@@ -10,9 +10,22 @@ import { useConductorStore } from '../../store/useConductorStore';
 import { useEffect } from 'react';
 
 const SummaryCards = () => {
-    const { busDetails, loading: busLoading, fetchBusData } = useBusStore();
-  const { conductors, loading: conductorsLoading, fetchConductorData } = useConductorStore();
-  const { drivers, loading: driversLoading, fetchDriverData } = useDriverStore();
+    const {
+        busDetails,
+        loading: busLoading,
+        tripHistory,
+        fetchBusData,
+    } = useBusStore();
+    const {
+        conductors,
+        loading: conductorsLoading,
+        fetchConductorData,
+    } = useConductorStore();
+    const {
+        drivers,
+        loading: driversLoading,
+        fetchDriverData,
+    } = useDriverStore();
 
     useEffect(() => {
         fetchConductorData();
@@ -24,13 +37,18 @@ const SummaryCards = () => {
 
     const isLoading = busLoading || conductorsLoading || driversLoading;
 
+    const totalRemitted: number = tripHistory.reduce(
+        (sum, trip) => sum + trip.remitted,
+        0
+    );
+
     const summaryData = [
         {
             title: 'Total Buses',
             value: isLoading ? (
                 <Skeleton.Input style={{ width: 50, height: 20 }} active />
             ) : (
-                busDetails.length
+                <>{new Intl.NumberFormat().format(busDetails.length)}</>
             ),
             icon: (
                 <FaBusAlt
@@ -46,12 +64,16 @@ const SummaryCards = () => {
             value: isLoading ? (
                 <Skeleton.Input style={{ width: 50, height: 20 }} active />
             ) : (
-                totalEmployees
+                <>{new Intl.NumberFormat().format(totalEmployees)}</>
             ),
             subtitle: isLoading ? (
                 <Skeleton.Input style={{ width: 80, height: 20 }} active />
             ) : (
-                `${drivers.length} Drivers, ${conductors.length} Conductors`
+                `${new Intl.NumberFormat().format(
+                    drivers.length
+                )} Drivers, ${new Intl.NumberFormat().format(
+                    conductors.length
+                )} Conductors`
             ),
             icon: (
                 <FaUsers
@@ -64,7 +86,11 @@ const SummaryCards = () => {
         },
         {
             title: 'Daily Income',
-            value: '₱12,450',
+            value: isLoading ? (
+                <Skeleton.Input style={{ width: 50, height: 20 }} active />
+            ) : (
+                <>₱{new Intl.NumberFormat().format(totalRemitted)}</>
+            ),
             icon: (
                 <FaArrowTrendUp
                     style={{ width: '20px', height: '20px', color: '#16a34a' }}
