@@ -1,11 +1,9 @@
 import { Card } from 'antd';
 import { FaBusAlt, FaUsers } from 'react-icons/fa';
-import {
-    FaArrowDown,
-    FaArrowTrendUp,
-    FaArrowUp,
-    FaPesoSign,
-} from 'react-icons/fa6';
+import { FaArrowDown, FaArrowTrendUp, FaArrowUp } from 'react-icons/fa6';
+
+import { LuPhilippinePeso } from 'react-icons/lu';
+
 const summaryData = [
     {
         title: 'Total Buses',
@@ -34,7 +32,7 @@ const summaryData = [
     },
     {
         title: 'Daily Income',
-        value: '$12,450',
+        value: '₱12,450',
         icon: (
             <FaArrowTrendUp
                 style={{ width: '20px', height: '20px', color: '#16a34a' }}
@@ -46,9 +44,9 @@ const summaryData = [
     },
     {
         title: 'Pending Salaries',
-        value: '$8,200',
+        value: '₱8,200',
         icon: (
-            <FaPesoSign
+            <LuPhilippinePeso
                 style={{ width: '20px', height: '20px', color: '#ea580c' }}
             />
         ),
