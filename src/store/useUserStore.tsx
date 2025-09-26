@@ -4,42 +4,42 @@ import type { UserInfo } from '../types';
 
 interface UserState {
     userInfo: UserInfo | null;
-    loading: boolean;
-    fetchUser: () => Promise<void>;
+    loading: boolean; // only for first mount
+    refreshing: boolean; //  session refresh
+    fetchUser: (isRefresh?: boolean) => Promise<void>;
     clearUser: () => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
     userInfo: null,
     loading: false,
+    refreshing: false,
 
-    fetchUser: async () => {
-        set({ loading: true });
+    fetchUser: async (isRefresh = false) => {
+        set({ [isRefresh ? 'refreshing' : 'loading']: true });
 
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
+        try {
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            if (!user) return;
 
-        if (user) {
-            const { data: admin, error } = await supabase
+            const { data: admin } = await supabase
                 .from('admins')
                 .select('full_name, email')
                 .eq('email', user.email)
                 .single();
-
-            if (error) {
-                console.error('Error fetching admin data:', error);
-            }
 
             set({
                 userInfo: {
                     full_name: admin?.full_name ?? undefined,
                     email: admin?.email ?? user.email ?? undefined,
                 },
-                loading: false,
             });
-        } else {
-            set({ loading: false });
+        } catch (err) {
+            console.error('Error fetching user:', err);
+        } finally {
+            set({ [isRefresh ? 'refreshing' : 'loading']: false });
         }
     },
 

@@ -41,7 +41,7 @@ const NavBar = ({
         fetchUser();
 
         const { data: subscription } = supabase.auth.onAuthStateChange(() => {
-            fetchUser();
+            fetchUser(true);
         });
 
         return () => {
