@@ -2,7 +2,8 @@ import { Layout, Menu, type MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { AiFillProject } from 'react-icons/ai';
-import { FaBus, FaUserAlt } from 'react-icons/fa';
+import { FaBus, FaUserAlt, FaRegClock, FaFileAlt } from 'react-icons/fa';
+import { FaMoneyBillTransfer } from 'react-icons/fa6';
 import { MdGroups } from 'react-icons/md';
 
 const { Sider } = Layout;
@@ -67,6 +68,17 @@ const SideBar = ({
                 ),
             ]
         ),
+        getItem(
+            'Trip Management',
+            5,
+            <FaRegClock style={{ fontSize: '1.5rem' }} />
+        ),
+        getItem(
+            'Salary Management',
+            6,
+            <FaMoneyBillTransfer style={{ fontSize: '1.5rem' }} />
+        ),
+        getItem('Reports', 7, <FaFileAlt style={{ fontSize: '1.5rem' }} />),
     ];
 
     return (

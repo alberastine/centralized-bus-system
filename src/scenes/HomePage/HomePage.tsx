@@ -10,6 +10,9 @@ import ConductorsPage from '../../pages/Conductors/Conductors';
 // import RevenueChart from '../../components/Chart/RevenueChart';
 import BusDetailsPage from '../../pages/Buses/BusDetailsPage';
 import { useLocation, useNavigate } from 'react-router-dom';
+import TripsPage from '../../pages/Trips/Trips';
+import SalaryPage from '../../pages/Salary/Salary';
+import ReportsPage from '../../pages/Reports/Reports';
 
 const { Content } = Layout;
 const HOME_ACTIVE_WIDGET_KEY = 'homeActiveWidget';
@@ -89,6 +92,12 @@ const HomePage = () => {
                 return (
                     <BusDetailsPage key={selectedBusId} busId={selectedBusId} />
                 );
+            case 5:
+                return <TripsPage />;
+            case 6:
+                return <SalaryPage />;
+            case 7:
+                return <ReportsPage />;
             default:
                 return (
                     <DashBoard
