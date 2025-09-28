@@ -21,7 +21,7 @@ const ongoingTrips = [
         driver: 'James Davis',
         conductor: 'Emma Thompson',
         route: 'University → Beach',
-        status: 'Loading',
+        status: 'Delayed',
     },
     {
         busNo: 'Bus 012',
@@ -38,28 +38,28 @@ const completedTrips = [
         driver: 'John Smith',
         conductor: 'Mary Jones',
         completedTime: '2:45 PM',
-        income: '₱145',
+        income: '₱1,345',
     },
     {
         busNo: 'Bus 005',
         driver: 'Chris Wilson',
         conductor: 'Jennifer Lee',
         completedTime: '2:30 PM',
-        income: '₱128',
+        income: '₱1,528',
     },
     {
         busNo: 'Bus 008',
         driver: 'Michael Davis',
         conductor: 'Rachel Green',
         completedTime: '2:15 PM',
-        income: '₱156',
+        income: '₱1,656',
     },
     {
         busNo: 'Bus 004',
         driver: 'William Brown',
         conductor: 'Amanda White',
         completedTime: '2:00 PM',
-        income: '₱134',
+        income: '₱1,434',
     },
 ];
 
@@ -111,7 +111,7 @@ const getStatusTag = (status: string) => {
                     <FaClock style={{ marginRight: 4 }} /> {status}
                 </Tag>
             );
-        case 'Loading':
+        case 'Delayed':
             return (
                 <Tag
                     color="orange"
@@ -131,14 +131,7 @@ const getStatusTag = (status: string) => {
 
 const TableSection = () => {
     return (
-        <div
-            style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                gap: '16px',
-                marginTop: '16px',
-            }}
-        >
+        <>
             {/* Ongoing Trips */}
             <Card
                 title={
@@ -156,6 +149,7 @@ const TableSection = () => {
                 style={{
                     borderRadius: '12px',
                     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                    marginTop: '1rem',
                 }}
             >
                 <Table
@@ -163,15 +157,44 @@ const TableSection = () => {
                     pagination={false}
                     rowKey="busNo"
                     columns={[
-                        { title: 'Bus', dataIndex: 'busNo', key: 'busNo' },
+                        { title: 'Bus No.', dataIndex: 'busNo', key: 'busNo' },
+                        {
+                            title: 'Driver',
+                            key: 'driver',
+                            render: (_, record) => (
+                                <div>
+                                    <div
+                                        style={{
+                                            fontSize: '12px',
+                                            color: '#6b7280',
+                                        }}
+                                    >
+                                        {record.driver}
+                                    </div>
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Conductor',
+                            key: 'conductor',
+                            render: (_, record) => (
+                                <div>
+                                    <div
+                                        style={{
+                                            fontSize: '12px',
+                                            color: '#6b7280',
+                                        }}
+                                    >
+                                        {record.conductor}
+                                    </div>
+                                </div>
+                            ),
+                        },
                         {
                             title: 'Route',
                             key: 'route',
                             render: (_, record) => (
                                 <div>
-                                    <div style={{ fontWeight: 500 }}>
-                                        {record.driver}
-                                    </div>
                                     <div
                                         style={{
                                             fontSize: '12px',
@@ -192,122 +215,146 @@ const TableSection = () => {
                 />
             </Card>
 
-            {/* Recently Completed Trips */}
-            <Card
-                title={
-                    <span
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                        }}
-                    >
-                        <FaCheckCircle style={{ color: '#16a34a' }} />
-                        Recently Completed
-                    </span>
-                }
+            <div
                 style={{
-                    borderRadius: '12px',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    gap: '1rem',
+                    marginTop: '1rem',
                 }}
             >
-                <Table
-                    dataSource={completedTrips}
-                    pagination={false}
-                    rowKey="busNo"
-                    columns={[
-                        { title: 'Bus', dataIndex: 'busNo', key: 'busNo' },
-                        {
-                            title: 'Time',
-                            key: 'completedTime',
-                            render: (_, record) => (
-                                <div>
-                                    <div style={{ fontWeight: 500 }}>
-                                        {record.completedTime}
+                {/* Recently Completed Trips */}
+                <Card
+                    title={
+                        <span
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                            }}
+                        >
+                            <FaCheckCircle style={{ color: '#16a34a' }} />
+                            Recently Completed
+                        </span>
+                    }
+                    style={{
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                    }}
+                >
+                    <Table
+                        dataSource={completedTrips}
+                        pagination={false}
+                        rowKey="busNo"
+                        columns={[
+                            { title: 'Bus', dataIndex: 'busNo', key: 'busNo' },
+                            {
+                                title: 'Time',
+                                key: 'completedTime',
+                                render: (_, record) => (
+                                    <div>
+                                        <div style={{ fontWeight: 500 }}>
+                                            {record.completedTime}
+                                        </div>
+                                        <div
+                                            style={{
+                                                fontSize: '12px',
+                                                color: '#6b7280',
+                                            }}
+                                        >
+                                            {record.driver}
+                                        </div>
                                     </div>
-                                    <div
+                                ),
+                            },
+                            {
+                                title: 'Income',
+                                dataIndex: 'income',
+                                key: 'income',
+                                render: (income) => (
+                                    <span
                                         style={{
-                                            fontSize: '12px',
-                                            color: '#6b7280',
+                                            fontWeight: 600,
+                                            color: '#16a34a',
                                         }}
                                     >
-                                        {record.driver}
-                                    </div>
-                                </div>
-                            ),
-                        },
-                        {
-                            title: 'Income',
-                            dataIndex: 'income',
-                            key: 'income',
-                            render: (income) => (
-                                <span
-                                    style={{
-                                        fontWeight: 600,
-                                        color: '#16a34a',
-                                    }}
-                                >
-                                    {income}
-                                </span>
-                            ),
-                        },
-                    ]}
-                />
-            </Card>
+                                        {income}
+                                    </span>
+                                ),
+                            },
+                        ]}
+                    />
+                </Card>
 
-            {/* Upcoming Salary Payouts */}
-            <Card
-                title={
-                    <span
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                        }}
-                    >
-                        <FaExclamationCircle style={{ color: '#ea580c' }} />
-                        Upcoming Payouts
-                    </span>
-                }
-                style={{
-                    borderRadius: '12px',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                }}
-            >
-                <Table
-                    dataSource={upcomingPayouts}
-                    pagination={false}
-                    rowKey="name"
-                    columns={[
-                        {
-                            title: 'Employee',
-                            key: 'employee',
-                            render: (_, record) => (
-                                <div>
-                                    <div style={{ fontWeight: 500 }}>
-                                        {record.name}
+                {/* Upcoming Salary Payouts */}
+                <Card
+                    title={
+                        <span
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                            }}
+                        >
+                            <FaExclamationCircle style={{ color: '#ea580c' }} />
+                            Upcoming Payouts
+                        </span>
+                    }
+                    style={{
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                    }}
+                >
+                    <Table
+                        dataSource={upcomingPayouts}
+                        pagination={false}
+                        rowKey="name"
+                        columns={[
+                            {
+                                title: 'Employee',
+                                key: 'employee',
+                                render: (_, record) => (
+                                    <div>
+                                        <div style={{ fontWeight: 500 }}>
+                                            {record.name}
+                                        </div>
+                                        <div
+                                            style={{
+                                                fontSize: '12px',
+                                                color: '#6b7280',
+                                            }}
+                                        >
+                                            {record.role}
+                                        </div>
                                     </div>
-                                    <div
-                                        style={{
-                                            fontSize: '12px',
-                                            color: '#6b7280',
-                                        }}
-                                    >
-                                        {record.role}
+                                ),
+                            },
+                            {
+                                title: 'Amount',
+                                key: 'amount',
+                                render: (_, record) => (
+                                    <div>
+                                        <div
+                                            style={{
+                                                fontWeight: 600,
+                                                color: '#1890ff',
+                                            }}
+                                        >
+                                            {record.amount}
+                                        </div>
                                     </div>
-                                </div>
-                            ),
-                        },
-                        { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-                        {
-                            title: 'Date',
-                            dataIndex: 'payoutDate',
-                            key: 'payoutDate',
-                        },
-                    ]}
-                />
-            </Card>
-        </div>
+                                ),
+                            },
+                            {
+                                title: 'Date',
+                                dataIndex: 'payoutDate',
+                                key: 'payoutDate',
+                            },
+                        ]}
+                    />
+                </Card>
+            </div>
+        </>
     );
 };
 

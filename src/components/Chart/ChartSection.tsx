@@ -122,10 +122,10 @@ const ChartSection = () => {
                                     <Line
                                         type="monotone"
                                         dataKey="income"
-                                        stroke="#3B82F6"
+                                        stroke="#16A34A"
                                         strokeWidth={3}
                                         dot={{
-                                            fill: '#3B82F6',
+                                            fill: '#16A34A',
                                             strokeWidth: 2,
                                             r: 4,
                                         }}
@@ -152,10 +152,10 @@ const ChartSection = () => {
                                     <Line
                                         type="monotone"
                                         dataKey="income"
-                                        stroke="#3B82F6"
+                                        stroke="#a855f7"
                                         strokeWidth={3}
                                         dot={{
-                                            fill: '#3B82F6',
+                                            fill: '#a855f7',
                                             strokeWidth: 2,
                                             r: 4,
                                         }}
