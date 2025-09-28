@@ -1,9 +1,27 @@
-import { Typography } from 'antd';
 import BusList from '../../components/Bus/BusList';
 import AddBus from '../../components/Bus/AddBus';
 import { useState } from 'react';
+import BusSummaryCards from '../../components/Bus/BusSummaryCards';
+import { Button, Dropdown, Input, Space, type MenuProps } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
-const { Title } = Typography;
+const { Search } = Input;
+
+const items: MenuProps['items'] = [
+    {
+        key: '1',
+        label: 'Avtive',
+    },
+    {
+        key: '2',
+        label: 'In Repair',
+    },
+    {
+        key: '3',
+        label: 'On Trip',
+    },
+];
+
 const BusesPage = ({
     setActiveWidget,
     setSelectedBusId,
@@ -15,24 +33,53 @@ const BusesPage = ({
 
     return (
         <div>
+            <BusSummaryCards busCount={busCount} />
             <div
                 style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '1.5rem',
+                    padding: '1.5rem',
+                    background: '#fff',
+                    marginTop: 16,
+                    borderRadius: 8,
                 }}
             >
-                <Title level={4} style={{ margin: '0' }}>
-                    Total Buses Owned: {busCount}
-                </Title>
-                <AddBus />
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '1.5rem',
+                    }}
+                >
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <Search
+                            placeholder="input search text"
+                            allowClear
+                            // onSearch={onSearch}
+                            style={{ width: 300 }}
+                        />
+                        <Dropdown
+                            menu={{
+                                items,
+                                selectable: true,
+                                defaultSelectedKeys: ['3'],
+                            }}
+                        >
+                            <Button>
+                                <Space>
+                                    All Statuss
+                                    <DownOutlined />
+                                </Space>
+                            </Button>
+                        </Dropdown>
+                    </div>
+                    <AddBus />
+                </div>
+                <BusList
+                    setActiveWidget={setActiveWidget}
+                    setSelectedBusId={setSelectedBusId}
+                    onBusCountChange={setBusCount}
+                />
             </div>
-            <BusList
-                setActiveWidget={setActiveWidget}
-                setSelectedBusId={setSelectedBusId}
-                onBusCountChange={setBusCount}
-            />
         </div>
     );
 };

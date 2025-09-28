@@ -147,7 +147,7 @@ const TableSection = () => {
                     </span>
                 }
                 style={{
-                    borderRadius: '12px',
+                    borderRadius: '8px',
                     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
                     marginTop: '1rem',
                 }}
@@ -238,7 +238,7 @@ const TableSection = () => {
                         </span>
                     }
                     style={{
-                        borderRadius: '12px',
+                        borderRadius: '8px',
                         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
                     }}
                 >
@@ -301,7 +301,7 @@ const TableSection = () => {
                         </span>
                     }
                     style={{
-                        borderRadius: '12px',
+                        borderRadius: '8px',
                         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
                     }}
                 >

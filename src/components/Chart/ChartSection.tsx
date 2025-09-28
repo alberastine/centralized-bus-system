@@ -69,7 +69,7 @@ const ChartSection = () => {
             <Card
                 title="Income Trends"
                 style={{
-                    borderRadius: '16px',
+                    borderRadius: '8px',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                 }}
             >
@@ -173,7 +173,7 @@ const ChartSection = () => {
                     title="Trips per Bus (Today)"
                     style={{
                         flex: 1,
-                        borderRadius: '16px',
+                        borderRadius: '8px',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                     }}
                 >
@@ -206,7 +206,7 @@ const ChartSection = () => {
                     title="Salary Distribution"
                     style={{
                         flex: 1,
-                        borderRadius: '16px',
+                        borderRadius: '8px',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                     }}
                 >

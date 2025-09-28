@@ -109,7 +109,7 @@ const HomePage = () => {
     };
 
     const widgetStyles =
-        activeWidget === 0
+        activeWidget === 0 || activeWidget === 1
             ? {
                   minHeight: '47vh',
               }
