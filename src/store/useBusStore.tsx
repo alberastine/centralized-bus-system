@@ -8,6 +8,7 @@ interface BusState {
     busPermitStatus: BusPermitStatus[];
     loading: boolean;
     nextBusNumber: string;
+    selectedBus: Buses | null;
     fetchBusData: () => Promise<void>;
     fetchBusDataById: (busId: string) => Promise<void>;
     fetchNextBusNumber: () => Promise<void>;
@@ -20,6 +21,7 @@ export const useBusStore = create<BusState>((set, get) => ({
     busPermitStatus: [],
     loading: false,
     nextBusNumber: '',
+    selectedBus: null,
 
     fetchBusData: async () => {
         set({ loading: true });
@@ -53,10 +55,11 @@ export const useBusStore = create<BusState>((set, get) => ({
         ]);
 
         set({
-            busDetails: busDetails || [],
+            // busDetails: busDetails || [],
             tripHistory: tripHistory || [],
             busPermitStatus: busPermitStatus || [],
             loading: false,
+            selectedBus: busDetails?.[0] || null,
         });
     },
 
@@ -101,32 +104,36 @@ export const useBusStore = create<BusState>((set, get) => ({
         const newBus = busData?.[0];
         if (!newBus) return;
 
-        const defaultPermit: BusPermitStatus = {
-            bus_id: newBus.bus_id,
-            has_cpc: false,
-            has_garage_accreditation: false,
-            has_conductor_permit: false,
-            has_mvr: false,
-            has_emission_test: false,
-            has_roadworthiness: false,
-            has_ctpl: false,
-            has_ppai: false,
-            has_mayors_permit: false,
-            has_barangay_clearance: false,
-        };
+        // Automatically create a default permit status for the new bus
+        // Might not be needed for now
+        // This will be updated to boolean to varchar later on
 
-        const { error: permitError } = await supabase
-            .from('bus_permit_status')
-            .insert([defaultPermit]);
+        // const defaultPermit: BusPermitStatus = {
+        //     bus_id: newBus.bus_id,
+        //     has_cpc: false,
+        //     has_garage_accreditation: false,
+        //     has_conductor_permit: false,
+        //     has_mvr: false,
+        //     has_emission_test: false,
+        //     has_roadworthiness: false,
+        //     has_ctpl: false,
+        //     has_ppai: false,
+        //     has_mayors_permit: false,
+        //     has_barangay_clearance: false,
+        // };
 
-        if (permitError) {
-            console.error('Failed to add bus permit status:', permitError);
-            throw permitError;
-        }
+        // const { error: permitError } = await supabase
+        //     .from('bus_permit_status')
+        //     .insert([defaultPermit]);
+
+        // if (permitError) {
+        //     console.error('Failed to add bus permit status:', permitError);
+        //     throw permitError;
+        // }
 
         set((state) => ({
             busDetails: [...state.busDetails, newBus],
-            busPermitStatus: [...state.busPermitStatus, defaultPermit],
+            // busPermitStatus: [...state.busPermitStatus, defaultPermit],
         }));
 
         get().fetchBusData();

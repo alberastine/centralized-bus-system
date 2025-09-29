@@ -1,20 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-    Table,
-    type TableProps,
-    Input,
-    Space,
-    Button,
-    Tag,
-} from 'antd';
+import { Table, type TableProps, Input, Space, Button, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 import { useBusStore } from '../../store/useBusStore';
 import type { Buses } from '../../types';
+import BusViewDetails from './BusViewDetails';
 
 const BusList = ({
-    setActiveWidget,
-    setSelectedBusId,
+    // setActiveWidget,
+    // setSelectedBusId,
     onBusCountChange,
 }: {
     setActiveWidget: (key: number) => void;
@@ -221,6 +215,15 @@ const BusList = ({
                     .toLowerCase()
                     .includes(String(value).toLowerCase()),
         },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_text, record) => (
+                <Space size="middle">
+                    <BusViewDetails busId={record.bus_id} />
+                </Space>
+            ),
+        },
     ];
 
     return (
@@ -232,13 +235,15 @@ const BusList = ({
                 pagination={false}
                 rowKey="bus_id"
                 size="small"
-                onRow={(record) => ({
-                    onClick: () => {
-                        setActiveWidget(4);
-                        setSelectedBusId(record.bus_id);
-                    },
-                    style: { cursor: 'pointer' },
-                })}
+                //Desable this for now
+
+                // onRow={(record) => ({
+                //     onClick: () => {
+                //         setActiveWidget(4);
+                //         setSelectedBusId(record.bus_id);
+                //     },
+                //     style: { cursor: 'pointer' },
+                // })}
                 onChange={handleTableChange}
             />
         </div>
