@@ -4,6 +4,8 @@ import AddBusFormModal from '../modal-content/BusFormModals/AddBusFormModal';
 
 import '../../styles/BusStyle.css';
 
+import { IoMdAdd } from 'react-icons/io';
+
 const AddBus = () => {
     const { openModal } = useModalStore();
 
@@ -12,7 +14,12 @@ const AddBus = () => {
     };
 
     return (
-        <Button type="primary" className="custom-btn" onClick={handleClick}>
+        <Button
+            type="primary"
+            className="custom-btn"
+            onClick={handleClick}
+            icon={<IoMdAdd />}
+        >
             Add Bus
         </Button>
     );

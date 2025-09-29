@@ -49,11 +49,11 @@ const BusSummaryCards = ({ busCount }: { busCount: number }) => {
                             width: 8,
                             height: 8,
                             borderRadius: '50%',
-                            background: 'green',
+                            background: '#22c55e',
                         }}
                     />
                 </Space>
-                <Title level={3} style={{ color: 'green' }}>
+                <Title level={3} style={{ color: '#22c55e' }}>
                     {statusCounts.active || 0}
                 </Title>
                 <Text type="secondary">Ready for operation</Text>

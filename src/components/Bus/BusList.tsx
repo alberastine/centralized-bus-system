@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
     Table,
-    Skeleton,
     type TableProps,
     Input,
     Space,
@@ -22,7 +21,7 @@ const BusList = ({
     setSelectedBusId: (id: string) => void;
     onBusCountChange?: (count: number) => void;
 }) => {
-    const { busDetails = [], fetchBusData, loading } = useBusStore();
+    const { busDetails = [], fetchBusData } = useBusStore();
 
     const [filteredInfo, setFilteredInfo] = useState<
         Record<string, React.Key[] | null>
@@ -226,28 +225,22 @@ const BusList = ({
 
     return (
         <div>
-            {loading ? (
-                <Skeleton active paragraph={{ rows: 4 }} />
-            ) : (
-                <>
-                    <Table
-                        dataSource={filteredData}
-                        columns={busColumns}
-                        scroll={{ y: 55 * 9 }}
-                        pagination={false}
-                        rowKey="bus_id"
-                        size="small"
-                        onRow={(record) => ({
-                            onClick: () => {
-                                setActiveWidget(4);
-                                setSelectedBusId(record.bus_id);
-                            },
-                            style: { cursor: 'pointer' },
-                        })}
-                        onChange={handleTableChange}
-                    />
-                </>
-            )}
+            <Table
+                dataSource={filteredData}
+                columns={busColumns}
+                scroll={{ y: 55 * 9 }}
+                pagination={false}
+                rowKey="bus_id"
+                size="small"
+                onRow={(record) => ({
+                    onClick: () => {
+                        setActiveWidget(4);
+                        setSelectedBusId(record.bus_id);
+                    },
+                    style: { cursor: 'pointer' },
+                })}
+                onChange={handleTableChange}
+            />
         </div>
     );
 };

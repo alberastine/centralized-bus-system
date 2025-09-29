@@ -1,4 +1,4 @@
-import { Card, Skeleton } from 'antd';
+import { Card } from 'antd';
 import { FaBusAlt, FaUsers } from 'react-icons/fa';
 import { FaArrowDown, FaArrowTrendUp, FaArrowUp } from 'react-icons/fa6';
 
@@ -12,18 +12,17 @@ import { useEffect } from 'react';
 const SummaryCards = () => {
     const {
         busDetails,
-        loading: busLoading,
         tripHistory,
         fetchBusData,
     } = useBusStore();
+
     const {
         conductors,
-        loading: conductorsLoading,
         fetchConductorData,
     } = useConductorStore();
+
     const {
         drivers,
-        loading: driversLoading,
         fetchDriverData,
     } = useDriverStore();
 
@@ -35,8 +34,6 @@ const SummaryCards = () => {
 
     const totalEmployees = drivers.length + conductors.length;
 
-    const isLoading = busLoading || conductorsLoading || driversLoading;
-
     const totalRemitted: number = tripHistory.reduce(
         (sum, trip) => sum + trip.remitted,
         0
@@ -45,11 +42,7 @@ const SummaryCards = () => {
     const summaryData = [
         {
             title: 'Total Buses',
-            value: isLoading ? (
-                <Skeleton.Input style={{ width: 50, height: 20 }} active />
-            ) : (
-                <>{new Intl.NumberFormat().format(busDetails.length)}</>
-            ),
+            value: new Intl.NumberFormat().format(busDetails.length),
             icon: (
                 <FaBusAlt
                     style={{ width: '20px', height: '20px', color: '#2563eb' }}
@@ -61,20 +54,12 @@ const SummaryCards = () => {
         },
         {
             title: 'Total Employees',
-            value: isLoading ? (
-                <Skeleton.Input style={{ width: 50, height: 20 }} active />
-            ) : (
-                <>{new Intl.NumberFormat().format(totalEmployees)}</>
-            ),
-            subtitle: isLoading ? (
-                <Skeleton.Input style={{ width: 80, height: 20 }} active />
-            ) : (
-                `${new Intl.NumberFormat().format(
-                    drivers.length
-                )} Drivers, ${new Intl.NumberFormat().format(
-                    conductors.length
-                )} Conductors`
-            ),
+            value: new Intl.NumberFormat().format(totalEmployees),
+            subtitle: `${new Intl.NumberFormat().format(
+                drivers.length
+            )} Drivers, ${new Intl.NumberFormat().format(
+                conductors.length
+            )} Conductors`,
             icon: (
                 <FaUsers
                     style={{ width: '20px', height: '20px', color: '#0d9488' }}
@@ -86,31 +71,27 @@ const SummaryCards = () => {
         },
         {
             title: 'Daily Income',
-            value: isLoading ? (
-                <Skeleton.Input style={{ width: 50, height: 20 }} active />
-            ) : (
-                <>₱{new Intl.NumberFormat().format(totalRemitted)}</>
-            ),
+            value: <>₱{new Intl.NumberFormat().format(totalRemitted)}</>,
             icon: (
                 <FaArrowTrendUp
-                    style={{ width: '20px', height: '20px', color: '#16a34a' }}
+                    style={{ width: '20px', height: '20px', color: '#a855f7' }}
                 />
             ),
             trend: '+15% from yesterday',
             trendUp: true,
-            bgColor: '#f0fdf4',
+            bgColor: '#f7eeffff',
         },
         {
             title: 'Pending Salaries',
             value: '₱8,200',
             icon: (
                 <LuPhilippinePeso
-                    style={{ width: '20px', height: '20px', color: '#ea580c' }}
+                    style={{ width: '20px', height: '20px', color: '#16a34a' }}
                 />
             ),
             trend: '12 employees',
             trendUp: false,
-            bgColor: '#fff7ed',
+            bgColor: '#f0fdf4',
         },
     ];
     return (
