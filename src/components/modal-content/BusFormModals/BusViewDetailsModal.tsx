@@ -3,21 +3,66 @@ import { useEffect } from 'react';
 
 import { FaBus, FaMapMarkerAlt, FaHistory, FaEdit } from 'react-icons/fa';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import { Tabs, Card, Badge, Input, Button, Tooltip } from 'antd';
+import {
+    Tabs,
+    Card,
+    Badge,
+    Input,
+    Button,
+    Tooltip,
+    Modal,
+    message,
+    Spin,
+} from 'antd';
+import type { Buses } from '../../../types';
+import { useModalStore } from '../../../store/useModalStore';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const BusViewDetailsModal = ({ busId }: { busId: string }) => {
-    const { selectedBus, fetchBusDataById } = useBusStore();
+    const { selectedBus, isLoadingBus, fetchBusDataById, deleteBusById } =
+        useBusStore();
+    const { closeModal } = useModalStore();
 
     useEffect(() => {
         if (busId) fetchBusDataById(busId);
     }, [busId, fetchBusDataById]);
 
-    if (!selectedBus) {
-        return <p>No bus details found.</p>;
+    if (isLoadingBus) {
+        return (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <Spin size="large" />
+                <p style={{ marginTop: '1rem' }}>Fetching bus details...</p>
+            </div>
+        );
     }
+
+    if (!selectedBus) {
+        return <p style={{ textAlign: 'center' }}>No bus details found.</p>;
+    }
+
+    const handleDeleteBus = (bus: Buses) => {
+        Modal.confirm({
+            title: 'Delete Bus',
+            content: `Are you sure you want to delete bus ${bus.bus_number}?`,
+            okText: 'Delete',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            async onOk() {
+                try {
+                    await deleteBusById(bus.bus_id);
+                    message.success(
+                        `Bus ${bus.bus_number} deleted successfully.`
+                    );
+                    closeModal();
+                } catch (error) {
+                    console.error('Error deleting bus:', error);
+                    message.error('Failed to delete bus. Please try again.');
+                }
+            },
+        });
+    };
 
     return (
         <div>
@@ -260,6 +305,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         color="danger"
                         variant="dashed"
                         icon={<FaRegTrashCan size={16} />}
+                        onClick={() => handleDeleteBus(selectedBus)}
                     >
                         Delete
                     </Button>

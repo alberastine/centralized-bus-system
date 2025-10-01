@@ -6,25 +6,27 @@ interface BusState {
     busDetails: Buses[];
     tripHistory: TripHistory[];
     busPermitStatus: BusPermitStatus[];
-    loading: boolean;
+    isLoadingBus: boolean;
     nextBusNumber: string;
     selectedBus: Buses | null;
     fetchBusData: () => Promise<void>;
     fetchBusDataById: (busId: string) => Promise<void>;
     fetchNextBusNumber: () => Promise<void>;
     addBus: (bus: Omit<Buses, 'bus_id'>) => Promise<void>;
+    deleteBusById: (busId: string) => Promise<void>;
+    updateBusById: (busId: string, updates: Partial<Buses>) => Promise<void>;
 }
 
 export const useBusStore = create<BusState>((set, get) => ({
     busDetails: [],
     tripHistory: [],
     busPermitStatus: [],
-    loading: false,
+    isLoadingBus: false,
     nextBusNumber: '',
     selectedBus: null,
 
     fetchBusData: async () => {
-        set({ loading: true });
+        set({ isLoadingBus: true });
 
         const [{ data: buses }, { data: trips }, { data: permits }] =
             await Promise.all([
@@ -37,12 +39,12 @@ export const useBusStore = create<BusState>((set, get) => ({
             busDetails: buses || [],
             tripHistory: trips || [],
             busPermitStatus: permits || [],
-            loading: false,
+            isLoadingBus: false,
         });
     },
 
     fetchBusDataById: async (busId: string) => {
-        set({ loading: true });
+        set({ isLoadingBus: true });
 
         const [
             { data: busDetails },
@@ -58,7 +60,7 @@ export const useBusStore = create<BusState>((set, get) => ({
             // busDetails: busDetails || [],
             tripHistory: tripHistory || [],
             busPermitStatus: busPermitStatus || [],
-            loading: false,
+            isLoadingBus: false,
             selectedBus: busDetails?.[0] || null,
         });
     },
@@ -138,5 +140,61 @@ export const useBusStore = create<BusState>((set, get) => ({
 
         get().fetchBusData();
         get().fetchNextBusNumber();
+    },
+    deleteBusById: async (busId: string) => {
+        // First delete dependent rows in bus_permit_status
+        const { error: permitError } = await supabase
+            .from('bus_permit_status')
+            .delete()
+            .eq('bus_id', busId);
+
+        if (permitError) {
+            console.error(
+                'Failed to delete bus_permit_status records:',
+                permitError
+            );
+            throw permitError;
+        }
+
+        // Then delete the bus itself
+        const { error: busError } = await supabase
+            .from('buses')
+            .delete()
+            .eq('bus_id', busId);
+
+        if (busError) {
+            console.error('Failed to delete bus:', busError);
+            throw busError;
+        }
+
+        set((state) => ({
+            busDetails: state.busDetails.filter((bus) => bus.bus_id !== busId),
+            selectedBus:
+                state.selectedBus?.bus_id === busId ? null : state.selectedBus,
+        }));
+    },
+    updateBusById: async (busId: string, updates: Partial<Buses>) => {
+        const { data: updatedBusData, error: busError } = await supabase
+            .from('buses')
+            .update(updates)
+            .eq('bus_id', busId)
+            .select();
+
+        if (busError) {
+            console.error('Failed to update bus:', busError);
+            throw busError;
+        }
+
+        const updatedBus = updatedBusData?.[0];
+        if (!updatedBus) return;
+
+        set((state) => ({
+            busDetails: state.busDetails.map((bus) =>
+                bus.bus_id === busId ? updatedBus : bus
+            ),
+        }));
+        if (get().selectedBus?.bus_id === busId) {
+            set({ selectedBus: updatedBus });
+        }
     },
 }));

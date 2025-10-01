@@ -11,7 +11,7 @@ const { Title } = Typography;
 const BusDetailsPage = ({ busId }: { busId: string | null }) => {
     const { drivers } = useDriverStore();
     const { conductors } = useConductorStore();
-    const { busDetails, tripHistory, loading, fetchBusDataById } =
+    const { busDetails, tripHistory, isLoadingBus, fetchBusDataById } =
         useBusStore();
 
     useEffect(() => {
@@ -122,7 +122,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
             </Title>
 
             <Card title="Basic Information" extra={<UpdateBusDetails  busId={busId}/>}>
-                {loading ? (
+                {isLoadingBus ? (
                     <Skeleton active paragraph={{ rows: 4 }} />
                 ) : (
                     busDetails.map((bus) => (
@@ -169,7 +169,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
             </Card>
 
             <Card title="Documents" extra={<AddBusPermit  busId={busId}/>}>
-                {loading ? (
+                {isLoadingBus ? (
                     <Skeleton active paragraph={{ rows: 3 }} />
                 ) : (
                     <Table
@@ -183,7 +183,7 @@ const BusDetailsPage = ({ busId }: { busId: string | null }) => {
             </Card>
 
             <Card title="Driver and Conductor History">
-                {loading ? (
+                {isLoadingBus ? (
                     <Skeleton active paragraph={{ rows: 5 }} />
                 ) : (
                     <Table
