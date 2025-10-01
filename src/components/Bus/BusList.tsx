@@ -231,7 +231,7 @@ const BusList = ({
             <Table
                 dataSource={filteredData}
                 columns={busColumns}
-                scroll={{ y: 55 * 9 }}
+                scroll={{ y: 40 * 7 }}
                 pagination={false}
                 rowKey="bus_id"
                 size="small"

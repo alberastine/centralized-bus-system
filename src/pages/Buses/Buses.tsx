@@ -32,7 +32,9 @@ const BusesPage = ({
     const [busCount, setBusCount] = useState(0);
 
     return (
-        <div>
+        <div className='bus-page-container'
+            style={{minHeight: '70vh' }}
+        >
             <BusSummaryCards busCount={busCount} />
             <div
                 style={{
@@ -40,6 +42,7 @@ const BusesPage = ({
                     background: '#fff',
                     marginTop: 16,
                     borderRadius: 8,
+                    marginBottom: '1rem',
                 }}
             >
                 <div

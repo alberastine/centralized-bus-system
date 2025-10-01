@@ -2,7 +2,8 @@ import { useBusStore } from '../../../store/useBusStore';
 import { useEffect } from 'react';
 
 import { FaBus, FaMapMarkerAlt, FaHistory, FaEdit } from 'react-icons/fa';
-import { Tabs, Card, Badge, Input, Button } from 'antd';
+import { FaRegTrashCan } from 'react-icons/fa6';
+import { Tabs, Card, Badge, Input, Button, Tooltip } from 'antd';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -254,8 +255,18 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                     marginTop: 16,
                 }}
             >
-                <Button type='primary' icon={<FaEdit size={16} />}>Edit</Button>
-                
+                <Button type="primary" icon={<FaEdit size={16} />}>
+                    Edit
+                </Button>
+                <Tooltip title="Delete Bus" color='red'>
+                    <Button
+                        color="danger"
+                        variant="dashed"
+                        icon={<FaRegTrashCan size={16} />}
+                    >
+                        Delete
+                    </Button>
+                </Tooltip>
             </div>
         </div>
     );

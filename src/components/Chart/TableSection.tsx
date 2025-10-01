@@ -221,6 +221,7 @@ const TableSection = () => {
                     gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                     gap: '1rem',
                     marginTop: '1rem',
+                    marginBottom: '1rem',
                 }}
             >
                 {/* Recently Completed Trips */}

@@ -144,7 +144,6 @@ const HomePage = () => {
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        flexWrap: 'wrap',
                     }}
                 >
                     {/* {activeWidget === 0 && (
