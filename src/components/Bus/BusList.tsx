@@ -103,13 +103,152 @@ const BusList = ({
             title: 'Route Number',
             dataIndex: 'route_number',
             key: 'route_number',
-            sorter: (a, b) => a.route_number.localeCompare(b.route_number),
+            filterDropdown: ({
+                setSelectedKeys,
+                selectedKeys,
+                confirm,
+                clearFilters,
+            }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Search Route Number"
+                        value={selectedKeys[0]}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedKeys(value ? [value] : []);
+                        }}
+                        onPressEnter={() =>
+                            handleSearch(
+                                selectedKeys as string[],
+                                confirm,
+                                'route_number'
+                            )
+                        }
+                        style={{ marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                handleSearch(
+                                    selectedKeys as string[],
+                                    confirm,
+                                    'route_number'
+                                )
+                            }
+                            icon={<SearchOutlined />}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Search
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                handleReset(clearFilters);
+                                setFilteredInfo((prev) => ({
+                                    ...prev,
+                                    route_number: null,
+                                }));
+                                confirm?.();
+                            }}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Reset
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => (
+                <SearchOutlined
+                    style={{ color: filtered ? '#1890ff' : undefined }}
+                />
+            ),
+            filteredValue:
+                (filteredInfo.route_number as React.Key[] | null) ??
+                (searchText && searchedColumn === 'route_number'
+                    ? [searchText]
+                    : null),
+            onFilter: (value, record) =>
+                String(record.route_number ?? '')
+                    .toLowerCase()
+                    .includes(String(value).toLowerCase()),
         },
         {
             title: 'Bus Number',
             dataIndex: 'bus_number',
             key: 'bus_number',
             sorter: (a, b) => a.bus_number.localeCompare(b.bus_number),
+            filterDropdown: ({
+                setSelectedKeys,
+                selectedKeys,
+                confirm,
+                clearFilters,
+            }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Search Bus Number"
+                        value={selectedKeys[0]}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedKeys(value ? [value] : []);
+                        }}
+                        onPressEnter={() =>
+                            handleSearch(
+                                selectedKeys as string[],
+                                confirm,
+                                'bus_number'
+                            )
+                        }
+                        style={{ marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                handleSearch(
+                                    selectedKeys as string[],
+                                    confirm,
+                                    'bus_number'
+                                )
+                            }
+                            icon={<SearchOutlined />}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Search
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                handleReset(clearFilters);
+                                setFilteredInfo((prev) => ({
+                                    ...prev,
+                                    bus_number: null,
+                                }));
+                                confirm?.();
+                            }}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Reset
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered: boolean) => (
+                <SearchOutlined
+                    style={{ color: filtered ? '#1677ff' : undefined }}
+                />
+            ),
+            filteredValue:
+                (filteredInfo.bus_number as React.Key[] | null) ??
+                (searchText && searchedColumn === 'bus_number'
+                    ? [searchText]
+                    : null),
+            onFilter: (value, record) =>
+                String(record.bus_number ?? '')
+                    .toLowerCase()
+                    .includes(String(value).toLowerCase()),
         },
         {
             title: 'Status',
@@ -145,7 +284,6 @@ const BusList = ({
             title: 'Plate Number',
             dataIndex: 'plate_number',
             key: 'plate_number',
-            sorter: (a, b) => a.plate_number.localeCompare(b.plate_number),
             filterDropdown: ({
                 setSelectedKeys,
                 selectedKeys,
@@ -204,6 +342,11 @@ const BusList = ({
                         </Button>
                     </Space>
                 </div>
+            ),
+            filterIcon: (filtered: boolean) => (
+                <SearchOutlined
+                    style={{ color: filtered ? '#1677ff' : undefined }}
+                />
             ),
             filteredValue:
                 (filteredInfo.plate_number as React.Key[] | null) ??

@@ -255,10 +255,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                     marginTop: 16,
                 }}
             >
-                <Button type="primary" icon={<FaEdit size={16} />}>
-                    Edit
-                </Button>
-                <Tooltip title="Delete Bus" color='red'>
+                <Tooltip title="Delete Bus" color="red">
                     <Button
                         color="danger"
                         variant="dashed"
@@ -267,6 +264,9 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         Delete
                     </Button>
                 </Tooltip>
+                <Button type="primary" icon={<FaEdit size={16} />}>
+                    Edit
+                </Button>
             </div>
         </div>
     );

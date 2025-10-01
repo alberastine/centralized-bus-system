@@ -19,6 +19,7 @@ const AddBus = () => {
             className="custom-btn"
             onClick={handleClick}
             icon={<IoMdAdd />}
+            style={{ backgroundColor: '#001529' }}
         >
             Add Bus
         </Button>

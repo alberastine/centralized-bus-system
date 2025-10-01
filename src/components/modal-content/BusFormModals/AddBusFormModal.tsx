@@ -85,7 +85,12 @@ const AddBusFormModal = () => {
                     marginTop: 16,
                 }}
             >
-                <Button className="custom-btn" onClick={handleCancel}>
+                <Button
+                    className="custom-btn"
+                    color="danger"
+                    variant="dashed"
+                    onClick={handleCancel}
+                >
                     Cancel
                 </Button>
                 <Button
