@@ -72,9 +72,66 @@ const AddBusFormModal = () => {
         <Form
             form={form}
             layout="vertical"
-            style={{ overflow: 'auto', maxHeight: '50vh' }}
+            style={{ overflow: 'auto', maxHeight: '90vh' }}
             requiredMark={false}
         >
+            <Form.Item
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Bus Number
+                    </span>
+                }
+                name="bus_number"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input the bus number!',
+                    },
+                ]}
+            >
+                <Input
+                    style={{
+                        color: '#666',
+                        fontWeight: '400',
+                    }}
+                    disabled
+                />
+            </Form.Item>
+
+            <Form.Item
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Plate Number
+                    </span>
+                }
+                name="plate_number"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input the plate number!',
+                    },
+                ]}
+            >
+                <Input placeholder="ABC-123" />
+            </Form.Item>
+
+            <Form.Item
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Bus Model
+                    </span>
+                }
+                name="bus_model"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input the bus model!',
+                    },
+                ]}
+            >
+                <Input placeholder="Bus Model" />
+            </Form.Item>
+
             <Form.Item
                 label={
                     <span style={{ fontWeight: 600, fontSize: '14px' }}>
@@ -107,43 +164,6 @@ const AddBusFormModal = () => {
                     placeholder="Auto-filled based on route number"
                     readOnly
                 />
-            </Form.Item>
-
-            <Form.Item
-                label={
-                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
-                        Bus Number
-                    </span>
-                }
-                name="bus_number"
-                rules={[
-                    { required: true, message: 'Please input the bus number!' },
-                ]}
-            >
-                <Input
-                    style={{
-                        color: '#666',
-                        fontWeight: '400',
-                    }}
-                    disabled
-                />
-            </Form.Item>
-
-            <Form.Item
-                label={
-                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
-                        Plate Number
-                    </span>
-                }
-                name="plate_number"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input the plate number!',
-                    },
-                ]}
-            >
-                <Input placeholder="ABC-123" />
             </Form.Item>
 
             <div
