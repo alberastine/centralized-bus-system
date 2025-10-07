@@ -2,7 +2,7 @@ export interface Buses {
     status: 'active' | 'inactive' | 'under maintenance';
     bus_id: string;
     bus_number: string;
-    route_number: string;
+    route_id: string;
     plate_number: string;
     assigned_driver?: string;
     assigned_conductor?: string;
@@ -14,6 +14,13 @@ export interface BusAssignment {
     conductor_id: string;
     assigned_from: string;
     assigned_to: string;
+}
+
+export interface Route {
+    id: string;
+    route_number: string;
+    route_description: string;
+    created_at?: string;
 }
 
 export interface BusPermitStatus {

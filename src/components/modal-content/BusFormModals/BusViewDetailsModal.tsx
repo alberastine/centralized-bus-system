@@ -1,18 +1,30 @@
 import { useEffect } from 'react';
 import { FaBus, FaMapMarkerAlt, FaHistory, FaEdit } from 'react-icons/fa';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import { Tabs, Card, Badge, Input, Button, Modal, message, Spin } from 'antd';
+import {
+    Tabs,
+    Card,
+    Badge,
+    Input,
+    Button,
+    Modal,
+    message,
+    Spin,
+    Tooltip,
+} from 'antd';
 import type { Buses } from '../../../types';
 import { useBusStore } from '../../../store/useBusStore';
 import { useModalStore } from '../../../store/useModalStore';
 import { useDriverStore } from '../../../store/useDriverStore';
 import { useConductorStore } from '../../../store/useConductorStore';
+import { useRouteStore } from '../../../store/useRouteStore';
 
 const { TextArea } = Input;
 
 const BusViewDetailsModal = ({ busId }: { busId: string }) => {
     const { drivers, fetchDriverData } = useDriverStore();
     const { conductors, fetchConductorData } = useConductorStore();
+    const { routes, fetchRoutes } = useRouteStore();
     const {
         selectedBus,
         isLoadingBus,
@@ -28,6 +40,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         if (busId) {
             fetchBusDataById(busId);
             fetchBusAssignmentsByBusId(busId);
+            fetchRoutes();
         }
 
         if (!drivers.length) {
@@ -93,6 +106,21 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         });
     };
 
+    const routeNumber = routes.find(
+        (r) => r.id === selectedBus.route_id
+    )?.route_number;
+
+    const routeDescription = routes.find(
+        (r) => r.id === selectedBus.route_id
+    )?.route_description;
+
+    const truncateText = (text: string, maxLength: number) => {
+        if (!text) return '';
+        return text.length > maxLength
+            ? text.slice(0, maxLength) + '...'
+            : text;
+    };
+
     const tabItems = [
         {
             key: 'overview',
@@ -156,17 +184,22 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         >
                             Current Route
                         </label>
-                        <p
-                            style={{
-                                fontSize: '14px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                            }}
+                        <Tooltip
+                            title={`${routeNumber} - ${routeDescription} `}
                         >
-                            <FaMapMarkerAlt style={{ color: 'red' }} /> Downtown
-                            - Airport
-                        </p>
+                            <p
+                                style={{
+                                    fontSize: '14px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    margin: 0,
+                                }}
+                            >
+                                <FaMapMarkerAlt style={{ color: 'red' }} />
+                                {truncateText(routeDescription || '', 15)}
+                            </p>
+                        </Tooltip>
                     </div>
                     <div>
                         <label
@@ -309,8 +342,8 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         marginBottom: '0',
                     }}
                 >
-                    <FaBus style={{ fontSize: '20px', color: '#1677ff' }} />{' '}
-                    {selectedBus.route_number} - {selectedBus.plate_number}
+                    <FaBus style={{ fontSize: '20px', color: '#1677ff' }} />
+                    {routeNumber} - {selectedBus.plate_number}
                 </h3>
                 <p
                     style={{

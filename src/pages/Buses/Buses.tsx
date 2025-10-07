@@ -4,6 +4,7 @@ import { useState } from 'react';
 import BusSummaryCards from '../../components/Bus/BusSummaryCards';
 import { Button, Dropdown, Input, Space, type MenuProps } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import AddRoute from '../../components/Bus/AddRoute';
 
 const { Search } = Input;
 
@@ -32,9 +33,7 @@ const BusesPage = ({
     const [busCount, setBusCount] = useState(0);
 
     return (
-        <div className='bus-page-container'
-            style={{minHeight: '70vh' }}
-        >
+        <div className="bus-page-container" style={{ minHeight: '70vh' }}>
             <BusSummaryCards busCount={busCount} />
             <div
                 style={{
@@ -74,6 +73,8 @@ const BusesPage = ({
                                 </Space>
                             </Button>
                         </Dropdown>
+
+                        <AddRoute />
                     </div>
                     <AddBus />
                 </div>

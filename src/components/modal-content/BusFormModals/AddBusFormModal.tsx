@@ -4,12 +4,14 @@ import { useBusStore } from '../../../store/useBusStore';
 import { useEffect } from 'react';
 
 import '../../../styles/BusStyle.css';
+import { useRouteStore } from '../../../store/useRouteStore';
 
 const AddBusFormModal = () => {
     const [form] = Form.useForm();
 
     const { closeModal } = useModalStore();
     const { fetchNextBusNumber, nextBusNumber, addBus } = useBusStore();
+    const { fetchRoutes, getRouteByNumber } = useRouteStore();
 
     useEffect(() => {
         const loadBusNumber = async () => {
@@ -24,6 +26,25 @@ const AddBusFormModal = () => {
         }
     }, [nextBusNumber, form]);
 
+    useEffect(() => {
+        fetchRoutes();
+    }, [fetchRoutes]);
+
+    const handleRouteNumberChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const routeNum = e.target.value;
+        const matchedRoute = getRouteByNumber(routeNum);
+
+        if (matchedRoute) {
+            form.setFieldsValue({
+                route_description: matchedRoute.route_description,
+            });
+        } else {
+            form.setFieldsValue({ route_description: '' });
+        }
+    };
+
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
@@ -33,7 +54,6 @@ const AddBusFormModal = () => {
                 status: values.status || 'active',
             };
             await addBus(payload);
-            console.log('Valid values:', payload);
             form.resetFields();
             closeModal();
         } catch (err) {
@@ -69,7 +89,24 @@ const AddBusFormModal = () => {
                     },
                 ]}
             >
-                <Input placeholder="17C, 17D, 17B" />
+                <Input
+                    placeholder="17C, 17D, 17B"
+                    onChange={handleRouteNumberChange}
+                />
+            </Form.Item>
+
+            <Form.Item
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Route Description
+                    </span>
+                }
+                name="route_description"
+            >
+                <Input
+                    placeholder="Auto-filled based on route number"
+                    readOnly
+                />
             </Form.Item>
 
             <Form.Item

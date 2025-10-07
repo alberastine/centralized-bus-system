@@ -3,6 +3,8 @@ import { Table, type TableProps, Input, Space, Button, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 import { useBusStore } from '../../store/useBusStore';
+import { useRouteStore } from '../../store/useRouteStore';
+
 import type { Buses } from '../../types';
 import BusViewDetails from './BusViewDetails';
 
@@ -16,6 +18,7 @@ const BusList = ({
     onBusCountChange?: (count: number) => void;
 }) => {
     const { busDetails = [], fetchBusData } = useBusStore();
+    const { routes = [], fetchRoutes } = useRouteStore();
 
     const [filteredInfo, setFilteredInfo] = useState<
         Record<string, React.Key[] | null>
@@ -25,7 +28,8 @@ const BusList = ({
 
     useEffect(() => {
         fetchBusData();
-    }, [fetchBusData]);
+        fetchRoutes();
+    }, [fetchBusData, fetchRoutes]);
 
     useEffect(() => {
         if (onBusCountChange) {
@@ -63,6 +67,14 @@ const BusList = ({
     const filteredData = useMemo(() => {
         let data = Array.isArray(busDetails) ? busDetails.slice() : [];
 
+        data = data.map((bus) => {
+            const route = routes.find((r) => r.id === bus.route_id);
+            return {
+                ...bus,
+                route_number: route?.route_number || 'N/A',
+            };
+        });
+
         const statusFilter = filteredInfo.status as string[] | null;
         if (statusFilter && statusFilter.length > 0) {
             const normalized = statusFilter.map((s) =>
@@ -96,7 +108,7 @@ const BusList = ({
         }
 
         return data;
-    }, [busDetails, filteredInfo, searchText, searchedColumn]);
+    }, [busDetails, filteredInfo, searchText, searchedColumn, routes]);
 
     const busColumns: TableProps<Buses>['columns'] = [
         {
@@ -121,7 +133,7 @@ const BusList = ({
                             handleSearch(
                                 selectedKeys as string[],
                                 confirm,
-                                'route_number'
+                                'route_id'
                             )
                         }
                         style={{ marginBottom: 8, display: 'block' }}
@@ -133,7 +145,7 @@ const BusList = ({
                                 handleSearch(
                                     selectedKeys as string[],
                                     confirm,
-                                    'route_number'
+                                    'route_id'
                                 )
                             }
                             icon={<SearchOutlined />}
@@ -170,7 +182,7 @@ const BusList = ({
                     ? [searchText]
                     : null),
             onFilter: (value, record) =>
-                String(record.route_number ?? '')
+                String(record.route_id ?? '')
                     .toLowerCase()
                     .includes(String(value).toLowerCase()),
         },
