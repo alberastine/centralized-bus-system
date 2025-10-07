@@ -26,24 +26,27 @@ const GlobalModal = ({
             title={
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {title && (
-                        <span
+                        <h3
                             style={{
-                                fontSize: '18px',
+                                marginBottom: '0',
+                                fontWeight: 600,
                             }}
                         >
                             {title}
-                        </span>
+                        </h3>
                     )}
                     {subtitle && (
-                        <span
+                        <p
                             style={{
+                                marginBottom: '16px',
+                                marginTop: '0',
+                                color: '#666',
+                                fontWeight: 400,
                                 fontSize: '14px',
-                                color: '#717182',
-                                marginBottom: 8,
                             }}
                         >
                             {subtitle}
-                        </span>
+                        </p>
                     )}
                 </div>
             }

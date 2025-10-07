@@ -1,10 +1,9 @@
 import { Button, Form, Input } from 'antd';
 import { useModalStore } from '../../../store/useModalStore';
 import { useBusStore } from '../../../store/useBusStore';
+import { useEffect } from 'react';
 
 import '../../../styles/BusStyle.css';
-
-import { useEffect } from 'react';
 
 const AddBusFormModal = () => {
     const [form] = Form.useForm();
@@ -43,7 +42,9 @@ const AddBusFormModal = () => {
     };
 
     const handleCancel = () => {
+        const currentBusNumber = form.getFieldValue('bus_number');
         form.resetFields();
+        form.setFieldValue('bus_number', currentBusNumber);
         closeModal();
     };
 
@@ -68,7 +69,7 @@ const AddBusFormModal = () => {
                     },
                 ]}
             >
-                <Input />
+                <Input placeholder="17C, 17D, 17B" />
             </Form.Item>
 
             <Form.Item
@@ -82,7 +83,13 @@ const AddBusFormModal = () => {
                     { required: true, message: 'Please input the bus number!' },
                 ]}
             >
-                <Input />
+                <Input
+                    style={{
+                        color: '#666',
+                        fontWeight: '400',
+                    }}
+                    disabled
+                />
             </Form.Item>
 
             <Form.Item
@@ -99,7 +106,7 @@ const AddBusFormModal = () => {
                     },
                 ]}
             >
-                <Input />
+                <Input placeholder="ABC-123" />
             </Form.Item>
 
             <div

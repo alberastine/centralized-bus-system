@@ -9,7 +9,7 @@ import { IoMdAdd } from 'react-icons/io';
 const AddBus = () => {
     const { openModal } = useModalStore();
 
-    const handleClick = () => {
+    const handleClick = async () => {
         openModal(
             <AddBusFormModal />,
             'Add New Bus',
