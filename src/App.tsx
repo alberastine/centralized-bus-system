@@ -42,7 +42,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 const App: React.FC = () => {
-    const { isModalOpen, closeModal, modalContent, modalTitle } =
+    const { isModalOpen, closeModal, modalContent, modalTitle, modalSubtitle } =
         useModalStore();
     return (
         <Router future={{ v7_relativeSplatPath: true }}>
@@ -50,6 +50,7 @@ const App: React.FC = () => {
                 open={isModalOpen}
                 onClose={closeModal}
                 title={modalTitle}
+                subtitle={modalSubtitle}
             >
                 {modalContent}
             </GlobalModal>

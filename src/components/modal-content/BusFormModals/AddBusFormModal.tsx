@@ -52,27 +52,52 @@ const AddBusFormModal = () => {
             form={form}
             layout="vertical"
             style={{ overflow: 'auto', maxHeight: '50vh' }}
+            requiredMark={false}
         >
             <Form.Item
-                label="Route Number"
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Route Number
+                    </span>
+                }
                 name="route_number"
-                rules={[{ required: true }]}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input the route number!',
+                    },
+                ]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label="Bus Number"
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Bus Number
+                    </span>
+                }
                 name="bus_number"
-                rules={[{ required: true }]}
+                rules={[
+                    { required: true, message: 'Please input the bus number!' },
+                ]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label="Plate Number"
+                label={
+                    <span style={{ fontWeight: 600, fontSize: '14px' }}>
+                        Plate Number
+                    </span>
+                }
                 name="plate_number"
-                rules={[{ required: true }]}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input the plate number!',
+                    },
+                ]}
             >
                 <Input />
             </Form.Item>

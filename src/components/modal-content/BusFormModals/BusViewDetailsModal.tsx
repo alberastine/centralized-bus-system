@@ -97,7 +97,6 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         });
     };
 
-    // Modern AntD v5 Tabs with items array
     const tabItems = [
         {
             key: 'overview',
@@ -328,7 +327,6 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                 </p>
             </div>
 
-            {/* ✅ Updated Tabs usage */}
             <Tabs defaultActiveKey="overview" items={tabItems} />
 
             <div

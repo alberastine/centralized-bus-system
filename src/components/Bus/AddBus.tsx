@@ -10,7 +10,11 @@ const AddBus = () => {
     const { openModal } = useModalStore();
 
     const handleClick = () => {
-        openModal(<AddBusFormModal />, 'Add New Bus');
+        openModal(
+            <AddBusFormModal />,
+            'Add New Bus',
+            'Add a new bus to your fleet management system.'
+        );
     };
 
     return (

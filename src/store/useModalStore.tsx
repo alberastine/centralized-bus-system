@@ -3,11 +3,13 @@ import { create } from 'zustand';
 type ModalStore = {
     isModalOpen: boolean;
     modalContent: React.ReactNode;
-    modalTitle: string;
+    modalTitle: React.ReactNode;
+    modalSubtitle?: React.ReactNode;
     modalOnClose?: () => void;
     openModal: (
         content: React.ReactNode,
-        title?: string,
+        title?: React.ReactNode,
+        subtitle?: React.ReactNode,
         onClose?: () => void
     ) => void;
     closeModal: () => void;
@@ -16,13 +18,15 @@ type ModalStore = {
 export const useModalStore = create<ModalStore>((set) => ({
     isModalOpen: false,
     modalContent: null,
-    modalTitle: '',
+    modalTitle: null,
+    modalSubtitle: null,
     modalOnClose: undefined,
-    openModal: (content, title = '', onClose) =>
+    openModal: (content, title = '', subtitle = '', onClose) =>
         set({
             isModalOpen: true,
             modalContent: content,
             modalTitle: title,
+            modalSubtitle: subtitle,
             modalOnClose: onClose,
         }),
     closeModal: () =>
