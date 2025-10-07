@@ -143,7 +143,9 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         >
                             Bus Model
                         </label>
-                        <p style={{ fontSize: '14px' }}>Mercedes Sprinter</p>
+                        <p style={{ fontSize: '14px', margin: 0 }}>
+                            Mercedes Sprinter
+                        </p>
                     </div>
                     <div>
                         <label
@@ -155,7 +157,9 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         >
                             Capacity
                         </label>
-                        <p style={{ fontSize: '14px' }}>45 passengers</p>
+                        <p style={{ fontSize: '14px', margin: 0 }}>
+                            45 passengers
+                        </p>
                     </div>
                     <div>
                         <label
@@ -211,7 +215,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         >
                             Assigned Driver
                         </label>
-                        <p style={{ fontSize: '14px' }}>
+                        <p style={{ fontSize: '14px', margin: 0 }}>
                             {driver?.full_name || 'No driver assigned'}
                         </p>
                     </div>
@@ -225,7 +229,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                         >
                             Assigned Conductor
                         </label>
-                        <p style={{ fontSize: '14px' }}>
+                        <p style={{ fontSize: '14px', margin: 0 }}>
                             {conductor?.full_name || 'No conductor assigned'}
                         </p>
                     </div>
