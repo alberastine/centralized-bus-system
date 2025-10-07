@@ -1,33 +1,43 @@
-import { useBusStore } from '../../../store/useBusStore';
 import { useEffect } from 'react';
-
 import { FaBus, FaMapMarkerAlt, FaHistory, FaEdit } from 'react-icons/fa';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import {
-    Tabs,
-    Card,
-    Badge,
-    Input,
-    Button,
-    Tooltip,
-    Modal,
-    message,
-    Spin,
-} from 'antd';
+import { Tabs, Card, Badge, Input, Button, Modal, message, Spin } from 'antd';
 import type { Buses } from '../../../types';
+import { useBusStore } from '../../../store/useBusStore';
 import { useModalStore } from '../../../store/useModalStore';
+import { useDriverStore } from '../../../store/useDriverStore';
+import { useConductorStore } from '../../../store/useConductorStore';
 
-const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const BusViewDetailsModal = ({ busId }: { busId: string }) => {
-    const { selectedBus, isLoadingBus, fetchBusDataById, deleteBusById } =
-        useBusStore();
+    const { drivers, fetchDriverData } = useDriverStore();
+    const { conductors, fetchConductorData } = useConductorStore();
+    const {
+        selectedBus,
+        isLoadingBus,
+        tripHistory,
+        fetchBusDataById,
+        deleteBusById,
+    } = useBusStore();
+
     const { closeModal } = useModalStore();
 
     useEffect(() => {
-        if (busId) fetchBusDataById(busId);
-    }, [busId, fetchBusDataById]);
+        if (busId) {
+            fetchBusDataById(busId);
+        }
+
+        if (!drivers.length) {
+            fetchDriverData();
+        }
+
+        if (!conductors.length) {
+            fetchConductorData();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [busId, fetchBusDataById, fetchDriverData, fetchConductorData]);
 
     if (isLoadingBus) {
         return (
@@ -42,6 +52,28 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         return <p style={{ textAlign: 'center' }}>No bus details found.</p>;
     }
 
+    // Get all trips for this specific bus
+    const busTrips = tripHistory.filter(
+        (trip) => String(trip.bus_id) === String(selectedBus.bus_id)
+    );
+
+    // Sort trips by date (latest first)
+    const sortedTrips = busTrips.sort((a, b) => {
+        const dateA = new Date(a.trip_date).getTime();
+        const dateB = new Date(b.trip_date).getTime();
+        return dateB - dateA;
+    });
+
+    const latestTrip = sortedTrips[0];
+
+    // Find related driver and conductor
+    const driver = drivers.find(
+        (d) => String(d.driver_id) === String(latestTrip?.driver_id)
+    );
+    const conductor = conductors.find(
+        (c) => String(c.conductor_id) === String(latestTrip?.conductor_id)
+    );
+
     const handleDeleteBus = (bus: Buses) => {
         Modal.confirm({
             title: 'Delete Bus',
@@ -49,6 +81,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
             okText: 'Delete',
             okType: 'danger',
             cancelText: 'Cancel',
+            cancelButtonProps: { type: 'primary' },
             async onOk() {
                 try {
                     await deleteBusById(bus.bus_id);
@@ -64,196 +97,171 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         });
     };
 
-    return (
-        <div>
-            <div key={selectedBus.bus_id}>
-                <h3
+    // Modern AntD v5 Tabs with items array
+    const tabItems = [
+        {
+            key: 'overview',
+            label: 'Overview',
+            children: (
+                <div
                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        marginBottom: '0',
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '16px',
                     }}
                 >
-                    <FaBus style={{ fontSize: '20px', color: '#1677ff' }} />{' '}
-                    {selectedBus.route_number} - {selectedBus.plate_number}
-                </h3>
-                <p
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Bus Model
+                        </label>
+                        <p style={{ fontSize: '14px' }}>Mercedes Sprinter</p>
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Capacity
+                        </label>
+                        <p style={{ fontSize: '14px' }}>45 passengers</p>
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Status
+                        </label>
+                        <div>
+                            <Badge
+                                status="success"
+                                text={selectedBus.status || 'Active'}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Current Route
+                        </label>
+                        <p
+                            style={{
+                                fontSize: '14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                            }}
+                        >
+                            <FaMapMarkerAlt style={{ color: 'red' }} /> Downtown
+                            - Airport
+                        </p>
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Assigned Driver
+                        </label>
+                        <p style={{ fontSize: '14px' }}>
+                            {driver?.full_name || 'No driver assigned'}
+                        </p>
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                color: '#888',
+                            }}
+                        >
+                            Assigned Conductor
+                        </label>
+                        <p style={{ fontSize: '14px' }}>
+                            {conductor?.full_name || 'No conductor assigned'}
+                        </p>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            key: 'performance',
+            label: 'Performance',
+            children: (
+                <div
                     style={{
-                        marginBottom: '16px',
-                        marginTop: '0',
-                        color: '#666',
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr',
+                        gap: '16px',
                     }}
                 >
-                    Detailed information and performance metrics
-                </p>
-            </div>
-
-            <Tabs defaultActiveKey="overview">
-                {/* Overview Tab */}
-                <TabPane tab="Overview" key="overview">
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr',
-                            gap: '16px',
-                        }}
+                    <Card
+                        styles={{ body: { padding: 12 } }}
+                        style={{ transition: 'box-shadow 0.2s' }}
                     >
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Bus Model
-                            </label>
-                            <p style={{ fontSize: '14px' }}>
-                                Mercedes Sprinter
-                            </p>
-                        </div>
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Capacity
-                            </label>
-                            <p style={{ fontSize: '14px' }}>45 passengers</p>
-                        </div>
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Status
-                            </label>
-                            <div>
-                                <Badge
-                                    status="success"
-                                    text={selectedBus.status || 'Active'}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Current Route
-                            </label>
-                            <p
-                                style={{
-                                    fontSize: '14px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                }}
-                            >
-                                <FaMapMarkerAlt style={{ color: 'red' }} />{' '}
-                                Downtown - Airport
-                            </p>
-                        </div>
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Assigned Driver
-                            </label>
-                            <p style={{ fontSize: '14px' }}>John Doe</p>
-                        </div>
-                        <div>
-                            <label
-                                style={{
-                                    fontSize: '12px',
-                                    fontWeight: 500,
-                                    color: '#888',
-                                }}
-                            >
-                                Assigned Conductor
-                            </label>
-                            <p style={{ fontSize: '14px' }}>Jane Smith</p>
-                        </div>
-                    </div>
-                </TabPane>
-
-                {/* Performance Tab */}
-                <TabPane tab="Performance" key="performance">
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '16px',
-                        }}
+                        <p style={{ fontSize: '12px', marginBottom: '8px' }}>
+                            Total Trips
+                        </p>
+                        <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                            250
+                        </h2>
+                    </Card>
+                    <Card
+                        styles={{ body: { padding: 12 } }}
+                        style={{ transition: 'box-shadow 0.2s' }}
                     >
-                        <Card>
-                            <p
-                                style={{
-                                    fontSize: '12px',
-                                    marginBottom: '8px',
-                                }}
-                            >
-                                Total Trips
-                            </p>
-                            <h2
-                                style={{ fontSize: '24px', fontWeight: 'bold' }}
-                            >
-                                250
-                            </h2>
-                        </Card>
-                        <Card>
-                            <p
-                                style={{
-                                    fontSize: '12px',
-                                    marginBottom: '8px',
-                                }}
-                            >
-                                Total Income
-                            </p>
-                            <h2
-                                style={{
-                                    fontSize: '24px',
-                                    fontWeight: 'bold',
-                                    color: 'green',
-                                }}
-                            >
-                                ₱500,000
-                            </h2>
-                        </Card>
-                        <Card>
-                            <p
-                                style={{
-                                    fontSize: '12px',
-                                    marginBottom: '8px',
-                                }}
-                            >
-                                Avg. per Trip
-                            </p>
-                            <h2
-                                style={{ fontSize: '24px', fontWeight: 'bold' }}
-                            >
-                                ₱2000
-                            </h2>
-                        </Card>
-                    </div>
-                </TabPane>
-
-                {/* Maintenance Tab */}
-                <TabPane tab="Maintenance" key="maintenance">
+                        <p style={{ fontSize: '12px', marginBottom: '8px' }}>
+                            Total Income
+                        </p>
+                        <h2
+                            style={{
+                                fontSize: '24px',
+                                fontWeight: 'bold',
+                                color: 'green',
+                            }}
+                        >
+                            ₱500,000
+                        </h2>
+                    </Card>
+                    <Card
+                        styles={{ body: { padding: 12 } }}
+                        style={{ transition: 'box-shadow 0.2s' }}
+                    >
+                        <p style={{ fontSize: '12px', marginBottom: '8px' }}>
+                            Avg. per Trip
+                        </p>
+                        <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                            ₱2000
+                        </h2>
+                    </Card>
+                </div>
+            ),
+        },
+        {
+            key: 'maintenance',
+            label: 'Maintenance',
+            children: (
+                <div>
                     <div style={{ marginBottom: '16px' }}>
                         <label
                             style={{
@@ -290,8 +298,39 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                             rows={4}
                         />
                     </div>
-                </TabPane>
-            </Tabs>
+                </div>
+            ),
+        },
+    ];
+
+    return (
+        <div>
+            <div key={selectedBus.bus_id}>
+                <h3
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '0',
+                    }}
+                >
+                    <FaBus style={{ fontSize: '20px', color: '#1677ff' }} />{' '}
+                    {selectedBus.route_number} - {selectedBus.plate_number}
+                </h3>
+                <p
+                    style={{
+                        marginBottom: '16px',
+                        marginTop: '0',
+                        color: '#666',
+                    }}
+                >
+                    Detailed information and performance metrics
+                </p>
+            </div>
+
+            {/* ✅ Updated Tabs usage */}
+            <Tabs defaultActiveKey="overview" items={tabItems} />
+
             <div
                 style={{
                     display: 'flex',
@@ -300,18 +339,16 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
                     marginTop: 16,
                 }}
             >
-                <Tooltip title="Delete Bus" color="red">
-                    <Button
-                        color="danger"
-                        variant="dashed"
-                        icon={<FaRegTrashCan size={16} />}
-                        onClick={() => handleDeleteBus(selectedBus)}
-                    >
-                        Delete
-                    </Button>
-                </Tooltip>
+                <Button
+                    color="danger"
+                    variant="dashed"
+                    icon={<FaRegTrashCan size={16} />}
+                    onClick={() => handleDeleteBus(selectedBus)}
+                >
+                    Delete Bus
+                </Button>
                 <Button type="primary" icon={<FaEdit size={16} />}>
-                    Edit
+                    Edit Bus Details
                 </Button>
             </div>
         </div>

@@ -10,21 +10,11 @@ import { useConductorStore } from '../../store/useConductorStore';
 import { useEffect } from 'react';
 
 const SummaryCards = () => {
-    const {
-        busDetails,
-        tripHistory,
-        fetchBusData,
-    } = useBusStore();
+    const { busDetails, tripHistory, fetchBusData } = useBusStore();
 
-    const {
-        conductors,
-        fetchConductorData,
-    } = useConductorStore();
+    const { conductors, fetchConductorData } = useConductorStore();
 
-    const {
-        drivers,
-        fetchDriverData,
-    } = useDriverStore();
+    const { drivers, fetchDriverData } = useDriverStore();
 
     useEffect(() => {
         fetchConductorData();
@@ -110,7 +100,10 @@ const SummaryCards = () => {
                     style={{
                         transition: 'box-shadow 0.2s',
                     }}
-                    bodyStyle={{ padding: '16px' }}
+                    styles={{
+                        body: { padding: 12 },
+                    }}
+                    
                 >
                     {/* Header */}
                     <div

@@ -13,11 +13,8 @@ import {
     Tooltip,
 } from 'recharts';
 
-import { Card } from 'antd';
-
-import { Tabs } from 'antd';
+import { Card, Tabs } from 'antd';
 import { useState } from 'react';
-const { TabPane } = Tabs;
 
 const incomeData = {
     daily: [
@@ -63,9 +60,102 @@ const salaryData = [
 const ChartSection = () => {
     const [incomeTab, setIncomeTab] = useState('daily');
 
+    const tabItems = [
+        {
+            key: 'daily',
+            label: 'Daily',
+            children: (
+                <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={incomeData.daily}>
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                stroke="#f0f0f0"
+                            />
+                            <XAxis dataKey="name" stroke="#888888" />
+                            <YAxis stroke="#888888" />
+                            <Tooltip
+                                formatter={(value: number) =>
+                                    `₱${value.toLocaleString()}`
+                                }
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="income"
+                                stroke="#3B82F6"
+                                strokeWidth={3}
+                                dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+            ),
+        },
+        {
+            key: 'weekly',
+            label: 'Weekly',
+            children: (
+                <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={incomeData.weekly}>
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                stroke="#f0f0f0"
+                            />
+                            <XAxis dataKey="name" stroke="#888888" />
+                            <YAxis stroke="#888888" />
+                            <Tooltip
+                                formatter={(value: number) =>
+                                    `₱${value.toLocaleString()}`
+                                }
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="income"
+                                stroke="#16A34A"
+                                strokeWidth={3}
+                                dot={{ fill: '#16A34A', strokeWidth: 2, r: 4 }}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+            ),
+        },
+        {
+            key: 'monthly',
+            label: 'Monthly',
+            children: (
+                <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={incomeData.monthly}>
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                stroke="#f0f0f0"
+                            />
+                            <XAxis dataKey="name" stroke="#888888" />
+                            <YAxis stroke="#888888" />
+                            <Tooltip
+                                formatter={(value: number) =>
+                                    `₱${value.toLocaleString()}`
+                                }
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="income"
+                                stroke="#a855f7"
+                                strokeWidth={3}
+                                dot={{ fill: '#a855f7', strokeWidth: 2, r: 4 }}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+            ),
+        },
+    ];
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* Income Trends - Full Width */}
+            {/* Income Trends */}
             <Card
                 title="Income Trends"
                 style={{
@@ -73,98 +163,11 @@ const ChartSection = () => {
                     boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                 }}
             >
-                <Tabs activeKey={incomeTab} onChange={setIncomeTab}>
-                    <TabPane tab="Daily" key="daily">
-                        <div style={{ height: '300px' }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={incomeData.daily}>
-                                    <CartesianGrid
-                                        strokeDasharray="3 3"
-                                        stroke="#f0f0f0"
-                                    />
-                                    <XAxis dataKey="name" stroke="#888888" />
-                                    <YAxis stroke="#888888" />
-                                    <Tooltip
-                                        formatter={(value: number) =>
-                                            `₱${value.toLocaleString()}`
-                                        }
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="income"
-                                        stroke="#3B82F6"
-                                        strokeWidth={3}
-                                        dot={{
-                                            fill: '#3B82F6',
-                                            strokeWidth: 2,
-                                            r: 4,
-                                        }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Weekly" key="weekly">
-                        <div style={{ height: '300px' }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={incomeData.weekly}>
-                                    <CartesianGrid
-                                        strokeDasharray="3 3"
-                                        stroke="#f0f0f0"
-                                    />
-                                    <XAxis dataKey="name" stroke="#888888" />
-                                    <YAxis stroke="#888888" />
-                                    <Tooltip
-                                        formatter={(value: number) =>
-                                            `₱${value.toLocaleString()}`
-                                        }
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="income"
-                                        stroke="#16A34A"
-                                        strokeWidth={3}
-                                        dot={{
-                                            fill: '#16A34A',
-                                            strokeWidth: 2,
-                                            r: 4,
-                                        }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Monthly" key="monthly">
-                        <div style={{ height: '300px' }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={incomeData.monthly}>
-                                    <CartesianGrid
-                                        strokeDasharray="3 3"
-                                        stroke="#f0f0f0"
-                                    />
-                                    <XAxis dataKey="name" stroke="#888888" />
-                                    <YAxis stroke="#888888" />
-                                    <Tooltip
-                                        formatter={(value: number) =>
-                                            `₱${value.toLocaleString()}`
-                                        }
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="income"
-                                        stroke="#a855f7"
-                                        strokeWidth={3}
-                                        dot={{
-                                            fill: '#a855f7',
-                                            strokeWidth: 2,
-                                            r: 4,
-                                        }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </TabPane>
-                </Tabs>
+                <Tabs
+                    activeKey={incomeTab}
+                    onChange={setIncomeTab}
+                    items={tabItems}
+                />
             </Card>
 
             <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
