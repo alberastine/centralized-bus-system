@@ -7,8 +7,6 @@ import DashBoard from '../../pages/DashBoard/DashBoard';
 import BusesPage from '../../pages/Buses/Buses';
 import DriversPage from '../../pages/Drivers/Drivers';
 import ConductorsPage from '../../pages/Conductors/Conductors';
-// import RevenueChart from '../../components/Chart/RevenueChart';
-import BusDetailsPage from '../../pages/Buses/BusDetailsPage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TripsPage from '../../pages/Trips/Trips';
 import SalaryPage from '../../pages/Salary/Salary';
@@ -89,14 +87,10 @@ const HomePage = () => {
             case 3:
                 return <ConductorsPage />;
             case 4:
-                return (
-                    <BusDetailsPage key={selectedBusId} busId={selectedBusId} />
-                );
-            case 5:
                 return <TripsPage />;
-            case 6:
+            case 5:
                 return <SalaryPage />;
-            case 7:
+            case 6:
                 return <ReportsPage />;
             default:
                 return (
@@ -146,19 +140,6 @@ const HomePage = () => {
                         flexDirection: 'column',
                     }}
                 >
-                    {/* {activeWidget === 0 && (
-                        <div
-                            style={{
-                                height: '20%',
-                                width: '100%',
-                                marginTop: '1.5rem',
-                                padding: '0 1rem',
-                            }}
-                        >
-                            <RevenueChart />
-                        </div>
-                    )} */}
-
                     <Content style={{ margin: '24px 16px 0', height: '100%' }}>
                         <div
                             className="site-layout-background"

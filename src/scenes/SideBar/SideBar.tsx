@@ -70,15 +70,15 @@ const SideBar = ({
         ),
         getItem(
             'Trip Management',
-            5,
+            4,
             <FaRegClock style={{ fontSize: '1.5rem' }} />
         ),
         getItem(
             'Salary Management',
-            6,
+            5,
             <FaMoneyBillTransfer style={{ fontSize: '1.5rem' }} />
         ),
-        getItem('Reports', 7, <FaFileAlt style={{ fontSize: '1.5rem' }} />),
+        getItem('Reports', 6, <FaFileAlt style={{ fontSize: '1.5rem' }} />),
     ];
 
     return (
