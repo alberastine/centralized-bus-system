@@ -1,16 +1,25 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabaseClient';
-import type { Buses, BusPermitStatus, TripHistory } from '../types';
+import type {
+    Buses,
+    BusPermitStatus,
+    TripHistory,
+    BusAssignment,
+} from '../types';
 
 interface BusState {
     busDetails: Buses[];
     tripHistory: TripHistory[];
     busPermitStatus: BusPermitStatus[];
+    busAssignments: BusAssignment[];
     isLoadingBus: boolean;
     nextBusNumber: string;
     selectedBus: Buses | null;
+
     fetchBusData: () => Promise<void>;
     fetchBusDataById: (busId: string) => Promise<void>;
+    fetchBusAssignments: () => Promise<void>;
+    fetchBusAssignmentsByBusId: (busId: string) => Promise<void>;
     fetchNextBusNumber: () => Promise<void>;
     addBus: (bus: Omit<Buses, 'bus_id'>) => Promise<void>;
     deleteBusById: (busId: string) => Promise<void>;
@@ -21,6 +30,7 @@ export const useBusStore = create<BusState>((set, get) => ({
     busDetails: [],
     tripHistory: [],
     busPermitStatus: [],
+    busAssignments: [],
     isLoadingBus: false,
     nextBusNumber: '',
     selectedBus: null,
@@ -28,17 +38,23 @@ export const useBusStore = create<BusState>((set, get) => ({
     fetchBusData: async () => {
         set({ isLoadingBus: true });
 
-        const [{ data: buses }, { data: trips }, { data: permits }] =
-            await Promise.all([
-                supabase.from('buses').select('*'),
-                supabase.from('trip_history').select('*'),
-                supabase.from('bus_permit_status').select('*'),
-            ]);
+        const [
+            { data: buses },
+            { data: trips },
+            { data: permits },
+            { data: assignments },
+        ] = await Promise.all([
+            supabase.from('buses').select('*'),
+            supabase.from('trip_history').select('*'),
+            supabase.from('bus_permit_status').select('*'),
+            supabase.from('bus_assignments').select('*'),
+        ]);
 
         set({
             busDetails: buses || [],
             tripHistory: trips || [],
             busPermitStatus: permits || [],
+            busAssignments: assignments || [],
             isLoadingBus: false,
         });
     },
@@ -50,19 +66,45 @@ export const useBusStore = create<BusState>((set, get) => ({
             { data: busDetails },
             { data: tripHistory },
             { data: busPermitStatus },
+            { data: busAssignments },
         ] = await Promise.all([
             supabase.from('buses').select('*').eq('bus_id', busId),
             supabase.from('trip_history').select('*').eq('bus_id', busId),
             supabase.from('bus_permit_status').select('*').eq('bus_id', busId),
+            supabase.from('bus_assignments').select('*').eq('bus_id', busId),
         ]);
 
         set({
             // busDetails: busDetails || [],
             tripHistory: tripHistory || [],
             busPermitStatus: busPermitStatus || [],
+            busAssignments: busAssignments || [],
             isLoadingBus: false,
             selectedBus: busDetails?.[0] || null,
         });
+    },
+
+    fetchBusAssignments: async () => {
+        const { data, error } = await supabase
+            .from('bus_assignments')
+            .select('*');
+        if (error) {
+            console.error('Failed to fetch bus assignments:', error);
+            return;
+        }
+        set({ busAssignments: data || [] });
+    },
+
+    fetchBusAssignmentsByBusId: async (busId: string) => {
+        const { data, error } = await supabase
+            .from('bus_assignments')
+            .select('*')
+            .eq('bus_id', busId);
+        if (error) {
+            console.error('Failed to fetch bus assignment by bus ID:', error);
+            return;
+        }
+        set({ busAssignments: data || [] });
     },
 
     fetchNextBusNumber: async () => {

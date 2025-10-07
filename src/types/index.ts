@@ -8,6 +8,14 @@ export interface Buses {
     assigned_conductor?: string;
 }
 
+export interface BusAssignment {
+    bus_id: string;
+    driver_id: string;
+    conductor_id: string;
+    assigned_from: string;
+    assigned_to: string;
+}
+
 export interface BusPermitStatus {
     bus_id: string;
     has_cpc: boolean;

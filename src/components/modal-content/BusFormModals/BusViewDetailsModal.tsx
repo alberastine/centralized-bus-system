@@ -16,8 +16,9 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
     const {
         selectedBus,
         isLoadingBus,
-        tripHistory,
+        busAssignments,
         fetchBusDataById,
+        fetchBusAssignmentsByBusId,
         deleteBusById,
     } = useBusStore();
 
@@ -26,6 +27,7 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
     useEffect(() => {
         if (busId) {
             fetchBusDataById(busId);
+            fetchBusAssignmentsByBusId(busId);
         }
 
         if (!drivers.length) {
@@ -37,7 +39,13 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [busId, fetchBusDataById, fetchDriverData, fetchConductorData]);
+    }, [
+        busId,
+        fetchBusDataById,
+        fetchBusAssignmentsByBusId,
+        fetchDriverData,
+        fetchConductorData,
+    ]);
 
     if (isLoadingBus) {
         return (
@@ -52,26 +60,14 @@ const BusViewDetailsModal = ({ busId }: { busId: string }) => {
         return <p style={{ textAlign: 'center' }}>No bus details found.</p>;
     }
 
-    // Get all trips for this specific bus
-    const busTrips = tripHistory.filter(
-        (trip) => String(trip.bus_id) === String(selectedBus.bus_id)
+    const assignment = busAssignments.find(
+        (a) => String(a.bus_id) === String(selectedBus?.bus_id)
     );
-
-    // Sort trips by date (latest first)
-    const sortedTrips = busTrips.sort((a, b) => {
-        const dateA = new Date(a.trip_date).getTime();
-        const dateB = new Date(b.trip_date).getTime();
-        return dateB - dateA;
-    });
-
-    const latestTrip = sortedTrips[0];
-
-    // Find related driver and conductor
     const driver = drivers.find(
-        (d) => String(d.driver_id) === String(latestTrip?.driver_id)
+        (d) => String(d.driver_id) === String(assignment?.driver_id)
     );
     const conductor = conductors.find(
-        (c) => String(c.conductor_id) === String(latestTrip?.conductor_id)
+        (c) => String(c.conductor_id) === String(assignment?.conductor_id)
     );
 
     const handleDeleteBus = (bus: Buses) => {
