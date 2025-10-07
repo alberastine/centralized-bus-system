@@ -2,6 +2,7 @@ export interface Buses {
     status: 'active' | 'inactive' | 'under maintenance';
     bus_id: string;
     bus_number: string;
+    bus_model: string;
     route_id: string;
     plate_number: string;
     assigned_driver?: string;
